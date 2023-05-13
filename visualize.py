@@ -1,7 +1,6 @@
 import matplotlib.colors as mc
 import matplotlib.pyplot as plt
 import numpy as np
-from model import SandStrategy
 
 # Disable divide by zero warning (probably from single-occurrance avalanches)
 np.seterr(divide = 'ignore') 
@@ -41,7 +40,7 @@ def plotAvalancheSizes(frequencies, sandStrategy, avalanches):
     
     fig = plt.figure(figsize = (7, 5))
     ax = fig.add_subplot()
-    ax.set_title('A(n) vs n, ' + convertStrategyToString(sandStrategy))
+    ax.set_title('A(n) vs n, ' + sandStrategy)
     
     ax.plot(np.log10(sizes), np.log10(frequencyBySize))
     ax.set_xlabel('log avalanche size')
@@ -84,11 +83,6 @@ def getAvalanceLogPlotData(frequencies):
     frequencyBySize = np.fromiter(map(lambda size: frequencies[size], sizes), dtype = int)
     biggestSize = sizes[sizes.size - 1]
     return(sizes, frequencyBySize, biggestSize)
-
-def convertStrategyToString(sandStrategy):
-    if sandStrategy == SandStrategy.RANDOM: return('Random')
-    elif sandStrategy == SandStrategy.CENTER: return('Center')
-    else: return('Edge')
 
 def sizeToSmallText(number):
     k = 1000
