@@ -31,9 +31,9 @@ class GetNeighborsFactory:
         return [
             *GetNeighborsFactory.Neumann(self, x, y),
             self.grid[x - 1, y - 1],
-            self.grid[x + 1, y - 1],
-            self.grid[x - 1, y + 1],
-            self.grid[x + 1, y + 1],
+            self.grid[(x + 1) % self.size, y - 1],
+            self.grid[x - 1, (y + 1) % self.size],
+            self.grid[(x + 1) % self.size, (y + 1) % self.size],
         ]
         
     @staticmethod
@@ -41,30 +41,25 @@ class GetNeighborsFactory:
         return [
             self.grid[x, y - 1],
             self.grid[x - 1, y],
-            self.grid[x + 1, y],
-            self.grid[x, y + 1],
+            self.grid[(x + 1) % self.size, y],
+            self.grid[x, (y + 1) % self.size],
         ]
 
 
 # njit methods must be defined outside the class environment
 # Advance the model one step forwards and update all cells
 @njit
-def step(a, p, size, grid):
-    nextGrid = np.copy(grid)
-    
-    for y in range(0, size):
-        for x in range(0, size):
-            if grid[x, y] == State.SUSCEPTIBLE:
-                # Be infected
-                # TODO: Count Infected neighbours, roll once each
-                if random.random() > a:
-                    nextGrid[x, y] = State.INFECTED
-            elif grid[x, y] == State.INFECTED:
-                # Recover
-                if random.random() > p:
-                    nextGrid[x, y] = State.RECOVERED
-    
-    return nextGrid
+def stepCell(a, p, size, grid, x, y):
+    if grid[x, y] == State.SUSCEPTIBLE:
+        # Be infected
+        # TODO: Count Infected neighbours, roll once each
+        if random.random() > a:
+            return State.INFECTED
+    elif grid[x, y] == State.INFECTED:
+        # Recover
+        if random.random() > p:
+            return State.RECOVERED
+    return State.INFECTED
 
 class Model:
     a = 1 # Infection rate
@@ -90,8 +85,14 @@ class Model:
     
     # Advance the model one step forwards and update all cells
     def step(self):
-        grid = step(self.a, self.p, self.size, self.grid)
-        self.grid = grid
+        nextGrid = np.copy(self.grid)
+        
+        for y in range(0, self.size):
+            for x in range(0, self.size):
+                # neighbours = self.getNeighbours(x, y)
+                nextGrid[x, y] = stepCell(self.a, self.p, self.size, self.grid, x, y)
+        
+        self.grid = nextGrid
         self.time += 1
     
     # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
