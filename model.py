@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from enum import IntEnum
+from enum import Enum, IntEnum
 from numba import njit
 
 
@@ -11,14 +11,49 @@ class State(IntEnum):
     RECOVERED = 2,
 
 
+# Specify the neighborhood type for the model
+class NeighborStrategy(Enum):
+    NEUMANN = 'Neumann',
+    MOORE = 'Moore',
+
+# Create a method for getting cell neighbors depending on the given strategy
+# TODO: Make iterable?
+# TODO: Add range
+class GetNeighborsFactory:
+    def Create(strategy):
+        if strategy == NeighborStrategy.NEUMANN:
+            return GetNeighborsFactory.Neumann
+        if strategy == NeighborStrategy.MOORE:
+            return GetNeighborsFactory.Moore
+    
+    @staticmethod
+    def Moore(self, x, y):
+        return [
+            *GetNeighborsFactory.Neumann(self, x, y),
+            self.grid[x - 1, y - 1],
+            self.grid[x + 1, y - 1],
+            self.grid[x - 1, y + 1],
+            self.grid[x + 1, y + 1],
+        ]
+        
+    @staticmethod
+    def Neumann(self, x, y):
+        return [
+            self.grid[x, y - 1],
+            self.grid[x - 1, y],
+            self.grid[x + 1, y],
+            self.grid[x, y + 1],
+        ]
+
+
 # njit methods must be defined outside the class environment
 # Advance the model one step forwards and update all cells
 @njit
 def step(a, p, size, grid):
     nextGrid = np.copy(grid)
     
-    for y in range(1, size - 1):
-        for x in range(1, size - 1):
+    for y in range(0, size):
+        for x in range(0, size):
             if grid[x, y] == State.SUSCEPTIBLE:
                 # Be infected
                 # TODO: Count Infected neighbours, roll once each
@@ -40,26 +75,25 @@ class Model:
     center = 0
     time = 0
     
-    def __init__(self, size, a = 0, p = 0):
+    def __init__(self, size, a = 0, p = 0, neighborStrategy = NeighborStrategy.NEUMANN):
         self.size = size
         self.center = round(self.size / 2)
         self.a = a
         self.p = p
+        self.setNeighborStrategy(neighborStrategy)
         
         self.grid = np.full([size, size], State.SUSCEPTIBLE)
-        self.clearEdges()
         self.grid[self.center, self.center] = State.INFECTED
     
-    # Reset edge cells
-    def clearEdges(self):
-        for i in range(0, self.size):
-            self.grid[i, 0] = State.SUSCEPTIBLE
-            self.grid[0, i] = State.SUSCEPTIBLE
-            self.grid[i, self.size - 1] = State.SUSCEPTIBLE
-            self.grid[self.size - 1, i] = State.SUSCEPTIBLE
+    def setNeighborStrategy(self, neighborStrategy):
+        self.getNeighborMethod = GetNeighborsFactory.Create(neighborStrategy)
     
     # Advance the model one step forwards and update all cells
     def step(self):
         grid = step(self.a, self.p, self.size, self.grid)
         self.grid = grid
         self.time += 1
+    
+    # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
+    def getNeighbours(self, x, y):
+        return self.getNeighborMethod(self, x, y)

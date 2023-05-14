@@ -4,10 +4,10 @@ from model import *
 from visualize import *
 
 
-size = 200
-a = 0.5 # Infection rate
-p = 0.5 # Recovery rate
-model = Model(size, a, p)
+size = 10
+a = 0.6 # Infection rate
+p = 0.25 # Recovery rate
+model = Model(size, a, p, NeighborStrategy.NEUMANN)
 print(f'Created model with size {size} and infection rate {a} and recovery rate {p}')
 
 batches = 1 # How many intermediate graphs are generated
@@ -19,4 +19,4 @@ for i in range(1, batches + 1):
     for j in range(0, stepsPerBatch):
         model.step()
     endTime = time.perf_counter()
-    print(f'Batch {i}: Simulated {stepsPerBatch} step in {endTime - startTime:.2f} seconds')
+    print(f'Batch {i}: Simulated {stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
