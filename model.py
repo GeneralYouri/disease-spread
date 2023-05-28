@@ -5,6 +5,7 @@ from numba import njit
 
 
 # SIR
+# TODO: Add more state types
 class State(IntEnum):
     SUSCEPTIBLE = 0,
     INFECTED = 1,
@@ -18,7 +19,7 @@ class NeighborStrategy(Enum):
 
 # Create a method for getting cell neighbors depending on the given strategy
 # TODO: Make iterable?
-# TODO: Add range
+# TODO: Add a neighborhood range variable
 class GetNeighborsFactory:
     def Create(strategy):
         if strategy == NeighborStrategy.NEUMANN:
@@ -61,11 +62,14 @@ def stepCell(a, p, size, grid, x, y):
             return State.RECOVERED
     return State.INFECTED
 
+# TODO: Various optimizations
+# 
 class Model:
     a = 1 # Infection rate
     p = 1 # Recovery rate
     
     grid = np.empty(0)
+    neighbors = np.empty(0)
     size = 0
     center = 0
     time = 0
@@ -79,9 +83,13 @@ class Model:
         
         self.grid = np.full([size, size], State.SUSCEPTIBLE)
         self.grid[self.center, self.center] = State.INFECTED
+        # self.neighbors = np.full([size, size], [])
     
     def setNeighborStrategy(self, neighborStrategy):
         self.getNeighborMethod = GetNeighborsFactory.Create(neighborStrategy)
+    
+    def setupNeighbors(self):
+        return
     
     # Advance the model one step forwards and update all cells
     def step(self):
