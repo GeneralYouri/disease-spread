@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from enum import Enum, IntEnum
-from numba import njit
+# from numba import njit
 
 
 # SIR
@@ -49,29 +49,30 @@ class GetNeighborsFactory:
 
 # njit methods must be defined outside the class environment
 # Advance the model one step forwards and update all cells
-@njit
-def stepCell(a, p, size, grid, x, y):
-    if grid[x, y] == State.SUSCEPTIBLE:
-        # Be infected
-        # TODO: Count Infected neighbours, roll once each
-        if random.random() > a:
-            return State.INFECTED
-    elif grid[x, y] == State.INFECTED:
-        # Recover
-        if random.random() > p:
-            return State.RECOVERED
-    return State.INFECTED
+# @njit
+# def updateCell(a, p, size, grid, x, y):
+#     if grid[x, y] == State.SUSCEPTIBLE:
+#         # Be infected
+#         # TODO: Count Infected neighbours, roll once each
+#         if random.random() > a:
+#             return State.INFECTED
+#     elif grid[x, y] == State.INFECTED:
+#         # Recover
+#         if random.random() > p:
+#             return State.RECOVERED
+#     return State.INFECTED
 
 # TODO: Various optimizations
 # 
 class Model:
+    size = 0
+    center = 0
     a = 1 # Infection rate
     p = 1 # Recovery rate
     
     grid = np.empty(0)
     neighbors = np.empty(0)
-    size = 0
-    center = 0
+    
     time = 0
     
     def __init__(self, size, a = 0, p = 0, neighborStrategy = NeighborStrategy.NEUMANN):
@@ -83,13 +84,10 @@ class Model:
         
         self.grid = np.full([size, size], State.SUSCEPTIBLE)
         self.grid[self.center, self.center] = State.INFECTED
-        # self.neighbors = np.full([size, size], [])
+        #self.neighbors = np.full([size, size], [])
     
     def setNeighborStrategy(self, neighborStrategy):
         self.getNeighborMethod = GetNeighborsFactory.Create(neighborStrategy)
-    
-    def setupNeighbors(self):
-        return
     
     # Advance the model one step forwards and update all cells
     def step(self):
@@ -97,11 +95,25 @@ class Model:
         
         for y in range(0, self.size):
             for x in range(0, self.size):
-                # neighbours = self.getNeighbours(x, y)
-                nextGrid[x, y] = stepCell(self.a, self.p, self.size, self.grid, x, y)
+                # nextGrid[x, y] = updateCell(self.a, self.p, self.size, self.grid, x, y)
+                nextGrid[x, y] = self.updateCell(x, y)
         
         self.grid = nextGrid
         self.time += 1
+    
+    # Calculate the new state for the cell at the given coordinates
+    def updateCell(self, x, y):
+        # neighbours = self.getNeighbours(x, y)
+        if self.grid[x, y] == State.SUSCEPTIBLE:
+            # Be infected
+            # TODO: Count Infected neighbours, roll once each
+            if random.random() > self.a:
+                return State.INFECTED
+        elif self.grid[x, y] == State.INFECTED:
+            # Recover
+            if random.random() > self.p:
+                return State.RECOVERED
+        return State.INFECTED
     
     # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
     def getNeighbours(self, x, y):
