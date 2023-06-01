@@ -103,17 +103,19 @@ class Model:
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
-        # neighbours = self.getNeighbours(x, y)
+        neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == State.SUSCEPTIBLE:
             # Be infected
             # TODO: Count Infected neighbours, roll once each
-            if random.random() > self.beta:
+            infected = neighbours.count(State.INFECTED)
+            failRate = (1 - self.beta) ** infected
+            if random.random() > failRate:
                 return State.INFECTED
         elif self.grid[x, y] == State.INFECTED:
             # Recover
             if random.random() > self.gamma:
                 return State.RECOVERED
-        return State.INFECTED
+        return self.grid[x, y]
     
     # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
     def getNeighbours(self, x, y):
