@@ -2,6 +2,8 @@ import matplotlib.colors as mc
 import matplotlib.pyplot as plt
 import numpy as np
 
+# TODO: This is old code, must be fully redone
+
 # Disable divide by zero warning (probably from single-occurrance avalanches)
 np.seterr(divide = 'ignore') 
 
