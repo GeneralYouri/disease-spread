@@ -75,11 +75,11 @@ class Model:
     
     time = 0
     
-    def __init__(self, size, a = 0, p = 0, neighborStrategy = NeighborStrategy.NEUMANN):
+    def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
         self.size = size
         self.center = round(self.size / 2)
-        self.a = a
-        self.p = p
+        self.beta = beta
+        self.gamma = gamma
         self.setNeighborStrategy(neighborStrategy)
         
         self.grid = np.full([size, size], State.SUSCEPTIBLE)
@@ -107,11 +107,11 @@ class Model:
         if self.grid[x, y] == State.SUSCEPTIBLE:
             # Be infected
             # TODO: Count Infected neighbours, roll once each
-            if random.random() > self.a:
+            if random.random() > self.beta:
                 return State.INFECTED
         elif self.grid[x, y] == State.INFECTED:
             # Recover
-            if random.random() > self.p:
+            if random.random() > self.gamma:
                 return State.RECOVERED
         return State.INFECTED
     
