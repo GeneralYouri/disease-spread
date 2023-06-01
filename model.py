@@ -118,3 +118,17 @@ class Model:
     # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
     def getNeighbours(self, x, y):
         return self.getNeighborMethod(self, x, y)
+
+    # Get 
+    def getSummary(self):
+        counts = {}
+        for state in State:
+            counts[state.name] = 0
+        
+        for y in range(0, self.size):
+            for x in range(0, self.size):
+                value = self.grid[x, y]
+                state = State(value).name
+                counts[state] += 1
+        
+        return counts
