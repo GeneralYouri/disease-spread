@@ -1,11 +1,12 @@
 import getopt
 import sys
 import time
-from sir import *
+from sirs import *
 from visualize import *
 
 
 # Default settings
+alpha = 0.05 # Immunity time after Recovery
 beta = 0.2 # Infection Rate
 gamma = 0.25 # Recovery Rate
 size = 75 # The size of the square grid
@@ -39,13 +40,13 @@ except getopt.error as err:
 
 # Model execution
 # TODO: Add more state types
-model = SIR(size, beta, gamma, NeighborStrategy.NEUMANN)
+model = SIRS(size, alpha, beta, gamma, NeighborStrategy.NEUMANN)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 
 for i in range(1, batches + 1):
     startTime = time.perf_counter()
-    for j in range(0, stepsPerBatch):
+    for _ in range(0, stepsPerBatch):
         model.step()
     endTime = time.perf_counter()
     print(f'Batch {i}: Simulated {stepsPerBatch} steps in {endTime - startTime:.2f} seconds')

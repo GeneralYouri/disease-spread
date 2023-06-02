@@ -12,7 +12,7 @@ class SIR(Model):
 
     def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
         super().__init__(size, beta, gamma, neighborStrategy)
-        
+    
     # TODO: Add different starting strategies
     def initialize(self):
         self.grid = np.full([self.size, self.size], self.State.SUSCEPTIBLE)
@@ -25,9 +25,9 @@ class SIR(Model):
         #     self.State.RECOVERED.name: 0,
         # })
         
-        # Start by infecting 10% of cells
+        # Start by infecting 10% of cells randomly
         initial = round(self.size * self.size / 10)
-        for i in range(0, initial):
+        for _ in range(0, initial):
             x = random.randint(0, self.size - 1)
             y = random.randint(0, self.size - 1)
             while (self.grid[x, y] == self.State.INFECTED):
@@ -44,13 +44,15 @@ class SIR(Model):
     def updateCell(self, x, y):
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
-            # Be infected
-            infected = neighbours.count(self.State.INFECTED)
-            compounded = 1 - (1 - self.beta) ** infected # TODO: Can be precalculated
+            # Sicken
+            infectedCount = neighbours.count(self.State.INFECTED)
+            compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.INFECTED
         elif self.grid[x, y] == self.State.INFECTED:
             # Recover
             if random.random() < self.gamma:
                 return self.State.RECOVERED
+        elif self.grid[x, y] == self.State.RECOVERED:
+            pass
         return self.grid[x, y]
