@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import random
 from enum import Enum, IntEnum
@@ -10,6 +11,18 @@ class State(IntEnum):
     SUSCEPTIBLE = 0,
     INFECTED = 1,
     RECOVERED = 2,
+
+
+# Plot SIR
+def plotSummary(history):
+    counts = {state: [t[state] for t in history] for state in history[0]}
+    
+    plt.plot(counts[State.SUSCEPTIBLE.name], 'black', lw = 2.0)
+    plt.plot(counts[State.INFECTED.name], 'red', lw = 2.0)
+    plt.plot(counts[State.RECOVERED.name], 'blue', lw = 2.0)
+    plt.xlabel('Time')
+    plt.ylabel('SIR')
+    plt.show()
 
 
 # Specify the neighborhood type for the model
@@ -47,33 +60,17 @@ class GetNeighborsFactory:
         ]
 
 
-# njit methods must be defined outside the class environment
-# Advance the model one step forwards and update all cells
-# @njit
-# def updateCell(a, p, size, grid, x, y):
-#     if grid[x, y] == State.SUSCEPTIBLE:
-#         # Be infected
-#         # TODO: Count Infected neighbours, roll once each
-#         if random.random() > a:
-#             return State.INFECTED
-#     elif grid[x, y] == State.INFECTED:
-#         # Recover
-#         if random.random() > p:
-#             return State.RECOVERED
-#     return State.INFECTED
-
-# TODO: Various optimizations
-# 
 class Model:
     size = 0
     center = 0
-    a = 1 # Infection rate
-    p = 1 # Recovery rate
+    beta = 1 # Infection rate
+    gamma = 1 # Recovery rate
     
     grid = np.empty(0)
     neighbors = np.empty(0)
     
     time = 0
+    history = []
     
     def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
         self.size = size
@@ -83,8 +80,14 @@ class Model:
         self.setNeighborStrategy(neighborStrategy)
         
         self.grid = np.full([size, size], State.SUSCEPTIBLE)
+        # Start by infecting the center cell
+        # TODO: Add different starting strategies
         self.grid[self.center, self.center] = State.INFECTED
-        #self.neighbors = np.full([size, size], [])
+        self.history.append({
+            State.SUSCEPTIBLE.name: size * size - 1,
+            State.INFECTED.name: 1,
+            State.RECOVERED.name: 0,
+        })
     
     def setNeighborStrategy(self, neighborStrategy):
         self.getNeighborMethod = GetNeighborsFactory.Create(neighborStrategy)
@@ -92,13 +95,18 @@ class Model:
     # Advance the model one step forwards and update all cells
     def step(self):
         nextGrid = np.copy(self.grid)
+        counts = {}
+        for state in State:
+            counts[state.name] = 0
         
         for y in range(0, self.size):
             for x in range(0, self.size):
-                # nextGrid[x, y] = updateCell(self.a, self.p, self.size, self.grid, x, y)
-                nextGrid[x, y] = self.updateCell(x, y)
+                newState = self.updateCell(x, y)
+                nextGrid[x, y] = newState
+                counts[State(newState).name] += 1
         
         self.grid = nextGrid
+        self.history.append(counts)
         self.time += 1
     
     # Calculate the new state for the cell at the given coordinates
@@ -106,9 +114,8 @@ class Model:
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == State.SUSCEPTIBLE:
             # Be infected
-            # TODO: Count Infected neighbours, roll once each
             infected = neighbours.count(State.INFECTED)
-            failRate = (1 - self.beta) ** infected
+            failRate = (1 - self.beta) ** infected # TODO: Can be precalculated
             if random.random() > failRate:
                 return State.INFECTED
         elif self.grid[x, y] == State.INFECTED:
@@ -120,17 +127,3 @@ class Model:
     # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
     def getNeighbours(self, x, y):
         return self.getNeighborMethod(self, x, y)
-
-    # Get 
-    def getSummary(self):
-        counts = {}
-        for state in State:
-            counts[state.name] = 0
-        
-        for y in range(0, self.size):
-            for x in range(0, self.size):
-                value = self.grid[x, y]
-                state = State(value).name
-                counts[state] += 1
-        
-        return counts

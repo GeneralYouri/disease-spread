@@ -10,7 +10,7 @@ beta = 0.6 # Infection Rate
 gamma = 0.25 # Recovery Rate
 size = 75 # The size of the square grid
 batches = 1 # How many intermediate graphs are generated
-stepsPerBatch = 100 # How many steps are simulated per batch
+stepsPerBatch = 10 # How many steps are simulated per batch
 
 
 # Input handling
@@ -36,10 +36,11 @@ except getopt.error as err:
     print(str(err))
     exit()
 
+
 # Model execution
 model = Model(size, beta, gamma, NeighborStrategy.NEUMANN)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
-print(f'Grid state: {model.getSummary()}')
+print(f'Grid state: {model.history[-1]}')
 
 for i in range(1, batches + 1):
     startTime = time.perf_counter()
@@ -47,4 +48,7 @@ for i in range(1, batches + 1):
         model.step()
     endTime = time.perf_counter()
     print(f'Batch {i}: Simulated {stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
-    print(f'Grid state: {model.getSummary()}')
+    print(f'Grid state: {model.history[-1]}')
+
+plotSummary(model.history)
+print(f'Finished simulation')
