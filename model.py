@@ -17,12 +17,14 @@ class State(IntEnum):
 def plotSummary(history):
     counts = {state: [t[state] for t in history] for state in history[0]}
     
-    plt.plot(counts[State.SUSCEPTIBLE.name], 'purple', lw = 2.0)
-    plt.plot(counts[State.INFECTED.name], 'red', lw = 2.0)
-    plt.plot(counts[State.RECOVERED.name], 'orange', lw = 2.0)
+    plt.plot(counts[State.SUSCEPTIBLE.name], label=State.SUSCEPTIBLE.name, color='purple')
+    plt.plot(counts[State.INFECTED.name], label=State.INFECTED.name, color='red')
+    plt.plot(counts[State.RECOVERED.name], label=State.RECOVERED.name, color='orange')
     plt.xlabel('Time')
     plt.ylabel('Proportion')
     plt.title('SIR Model')
+    plt.legend()
+    plt.grid(True)
     plt.show()
 
 
@@ -83,10 +85,25 @@ class Model:
         self.grid = np.full([size, size], State.SUSCEPTIBLE)
         # Start by infecting the center cell
         # TODO: Add different starting strategies
-        self.grid[self.center, self.center] = State.INFECTED
+        # self.grid[self.center, self.center] = State.INFECTED
+        # self.history.append({
+        #     State.SUSCEPTIBLE.name: size * size - 1,
+        #     State.INFECTED.name: 1,
+        #     State.RECOVERED.name: 0,
+        # })
+        
+        # Start by infecting 10% of cells
+        initial = round(self.size * self.size / 10)
+        for i in range(0, initial):
+            x = random.randint(0, self.size - 1)
+            y = random.randint(0, self.size - 1)
+            while (self.grid[x, y] == State.INFECTED):
+                x = random.randint(0, self.size - 1)
+                y = random.randint(0, self.size - 1)
+            self.grid[x, y] = State.INFECTED
         self.history.append({
-            State.SUSCEPTIBLE.name: size * size - 1,
-            State.INFECTED.name: 1,
+            State.SUSCEPTIBLE.name: size * size - initial,
+            State.INFECTED.name: initial,
             State.RECOVERED.name: 0,
         })
     
