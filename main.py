@@ -24,9 +24,9 @@ try:
         if currentArgument in ('--size'):
             size = int(currentValue)
         elif currentArgument in ('--beta'):
-            beta = int(currentValue)
+            beta = float(currentValue)
         elif currentArgument in ('--gamma'):
-            gamma = int(currentValue)
+            gamma = float(currentValue)
         elif currentArgument in ('--b', '--batches'):
             batches = int(currentValue)
         elif currentArgument in ('--s', '--steps'):
