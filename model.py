@@ -17,11 +17,12 @@ class State(IntEnum):
 def plotSummary(history):
     counts = {state: [t[state] for t in history] for state in history[0]}
     
-    plt.plot(counts[State.SUSCEPTIBLE.name], 'black', lw = 2.0)
+    plt.plot(counts[State.SUSCEPTIBLE.name], 'purple', lw = 2.0)
     plt.plot(counts[State.INFECTED.name], 'red', lw = 2.0)
-    plt.plot(counts[State.RECOVERED.name], 'blue', lw = 2.0)
+    plt.plot(counts[State.RECOVERED.name], 'orange', lw = 2.0)
     plt.xlabel('Time')
-    plt.ylabel('SIR')
+    plt.ylabel('Proportion')
+    plt.title('SIR Model')
     plt.show()
 
 
@@ -115,12 +116,12 @@ class Model:
         if self.grid[x, y] == State.SUSCEPTIBLE:
             # Be infected
             infected = neighbours.count(State.INFECTED)
-            failRate = (1 - self.beta) ** infected # TODO: Can be precalculated
-            if random.random() > failRate:
+            compounded = 1 - (1 - self.beta) ** infected # TODO: Can be precalculated
+            if random.random() < compounded:
                 return State.INFECTED
         elif self.grid[x, y] == State.INFECTED:
             # Recover
-            if random.random() > self.gamma:
+            if random.random() < self.gamma:
                 return State.RECOVERED
         return self.grid[x, y]
     
