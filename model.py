@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import time
 from enum import Enum, IntEnum
-# from numba import njit
 
 
 # SIR
@@ -15,16 +15,18 @@ class State(IntEnum):
 
 # Plot SIR
 def plotSummary(history):
+    times = range(0, len(history))
     counts = {state: [t[state] for t in history] for state in history[0]}
     
-    plt.plot(counts[State.SUSCEPTIBLE.name], label=State.SUSCEPTIBLE.name, color='purple')
-    plt.plot(counts[State.INFECTED.name], label=State.INFECTED.name, color='red')
-    plt.plot(counts[State.RECOVERED.name], label=State.RECOVERED.name, color='orange')
+    plt.plot(times, counts[State.SUSCEPTIBLE.name], label=State.SUSCEPTIBLE.name, color='purple')
+    plt.plot(times, counts[State.INFECTED.name], label=State.INFECTED.name, color='red')
+    plt.plot(times, counts[State.RECOVERED.name], label=State.RECOVERED.name, color='orange')
     plt.xlabel('Time')
     plt.ylabel('Proportion')
     plt.title('SIR Model')
     plt.legend()
     plt.grid(True)
+    plt.savefig(f'plots/plot_summary_{int(time.time() * 1000)}')
     plt.show()
 
 

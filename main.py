@@ -6,7 +6,7 @@ from visualize import *
 
 
 # Default settings
-beta = 0.6 # Infection Rate
+beta = 0.2 # Infection Rate
 gamma = 0.25 # Recovery Rate
 size = 75 # The size of the square grid
 batches = 1 # How many intermediate graphs are generated
