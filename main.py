@@ -1,7 +1,7 @@
 import getopt
 import sys
 import time
-from model import *
+from sir import *
 from visualize import *
 
 
@@ -38,7 +38,8 @@ except getopt.error as err:
 
 
 # Model execution
-model = Model(size, beta, gamma, NeighborStrategy.NEUMANN)
+# TODO: Add more state types
+model = SIR(size, beta, gamma, NeighborStrategy.NEUMANN)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 
@@ -50,5 +51,5 @@ for i in range(1, batches + 1):
     print(f'Batch {i}: Simulated {stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
     print(f'Grid state: {model.history[-1]}')
 
-plotSummary(model.history)
+model.plotSummary()
 print(f'Finished simulation')
