@@ -12,10 +12,9 @@ class SIR(SI):
         RECOVERED = 2,
     
     def updateCell(self, x, y):
-        neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
             # Sicken
-            infectedCount = neighbours.count(self.State.INFECTIOUS)
+            infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.INFECTIOUS

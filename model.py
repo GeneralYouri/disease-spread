@@ -1,47 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from enum import Enum, IntEnum
+from enum import IntEnum
+import neighborhood
 
 
 # Plot line colors for visualisation purposes
 # TODO: Better tie these to States
 colors = ['purple', 'red', 'orange']
-
-
-# Specify the neighborhood type for the model
-class NeighborStrategy(Enum):
-    NEUMANN = 'Neumann',
-    MOORE = 'Moore',
-
-# Create a method for getting cell neighbors depending on the given strategy
-# TODO: Make iterable?
-# TODO: Add a neighborhood range variable
-class GetNeighborsFactory:
-    def Create(strategy):
-        if strategy == NeighborStrategy.NEUMANN:
-            return GetNeighborsFactory.Neumann
-        if strategy == NeighborStrategy.MOORE:
-            return GetNeighborsFactory.Moore
-    
-    @staticmethod
-    def Moore(self, x, y):
-        return [
-            *GetNeighborsFactory.Neumann(self, x, y),
-            self.grid[x - 1, y - 1],
-            self.grid[(x + 1) % self.size, y - 1],
-            self.grid[x - 1, (y + 1) % self.size],
-            self.grid[(x + 1) % self.size, (y + 1) % self.size],
-        ]
-        
-    @staticmethod
-    def Neumann(self, x, y):
-        return [
-            self.grid[x, y - 1],
-            self.grid[x - 1, y],
-            self.grid[(x + 1) % self.size, y],
-            self.grid[x, (y + 1) % self.size],
-        ]
 
 
 # Abstract Base Class for the various CA Models for disease spread
@@ -53,29 +19,37 @@ class Model:
     grid = np.empty(0)
     history = []
     
+    # Available States in this model
     class State(IntEnum):
-        DEFAULT = 0,
+        INFECTIOUS = 0,
 
-    def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
+    def __init__(self, strategy, r, **settings):
         for name, value in settings.items():
             setattr(self, name, value)
         self.center = round(self.size / 2)
-        self.setNeighborStrategy(neighborStrategy)
+        self.setNeighborhood(strategy, r)
 
         self.initialize()
         self.history.append(self.getCounts())
     
+    # Define the model's cell neighborhood, from the given strategy and range
+    def setNeighborhood(self, strategy, r):
+        if strategy == neighborhood.Strategy.MOORE:
+            self.neighborhood = neighborhood.moore(r)
+        elif strategy == neighborhood.Strategy.NEUMANN:
+            self.neighborhood = neighborhood.neumann(r)
+    
     # Create the initial grid state
     def initialize(self):
-        self.grid = np.full([self.size, self.size], self.State.DEFAULT)
+        self.grid = np.full([self.size, self.size], self.State.INFECTIOUS)
     
-    # Apply the given neighbor strategy to the model
-    def setNeighborStrategy(self, neighborStrategy):
-        self.getNeighborMethod = GetNeighborsFactory.Create(neighborStrategy)
-    
-    # Get neighborhood cells for a given grid coordinate, using the Model's Neighborhood Strategy
-    def getNeighbours(self, x, y):
-        return self.getNeighborMethod(self, x, y)
+    # Count the number of infected cells in the cell's specified neighborhood
+    def countInfectedNeighbors(self, x, y):
+        count = 0
+        for dx, dy in self.neighborhood:
+            if self.grid[(x + dx) % self.size, (y + dy) % self.size] == self.State.INFECTIOUS:
+                count += 1
+        return count
     
     # Advance the model one step forwards and update all cells
     def step(self):
@@ -105,7 +79,7 @@ class Model:
         return counts
     
     # Plot summary/history data of the simulation so far
-    def plotSummary(self):
+    def plotSummary(self, save = True, show = False):
         times = range(0, len(self.history))
         counts = {state: [t[state] for t in self.history] for state in self.history[0]}
         
@@ -117,5 +91,7 @@ class Model:
         plt.legend()
         plt.grid(True)
         timestamp = int(time.time() * 1000)
-        plt.savefig(f'plots/plot_summary_{timestamp}')
-        # plt.show()
+        if save:
+            plt.savefig(f'plots/plot_summary_{timestamp}')
+        if show:
+            plt.show()

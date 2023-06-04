@@ -10,9 +10,6 @@ class SI(Model):
     class State(IntEnum):
         SUSCEPTIBLE = 0,
         INFECTIOUS = 1,
-
-    def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
-        super().__init__(neighborStrategy, **settings)
     
     # TODO: Add different starting strategies
     def initialize(self):
@@ -33,11 +30,12 @@ class SI(Model):
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
-        neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
             # Sicken
-            infectedCount = neighbours.count(self.State.INFECTIOUS)
+            infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.INFECTIOUS
+        elif self.grid[x, y] == self.State.INFECTIOUS:
+            pass
         return self.grid[x, y]

@@ -13,10 +13,9 @@ class SEIR(SEI):
         RECOVERED = 3,
     
     def updateCell(self, x, y):
-        neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
             # Exposure
-            infectedCount = neighbours.count(self.State.EXPOSED)
+            infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.EXPOSED
