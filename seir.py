@@ -21,7 +21,7 @@ class SEIR(SEI):
                 return self.State.EXPOSED
         elif self.grid[x, y] == self.State.EXPOSED:
             # Sicken
-            if random.random() < self.theta:
+            if random.random() < self.delta:
                 return self.State.INFECTIOUS
         elif self.grid[x, y] == self.State.INFECTIOUS:
             # Recover
