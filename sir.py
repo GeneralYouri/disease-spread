@@ -7,7 +7,7 @@ from model import *
 class SIR(Model):
     class State(IntEnum):
         SUSCEPTIBLE = 0,
-        INFECTED = 1,
+        INFECTIOUS = 1,
         RECOVERED = 2,
 
     def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
@@ -30,13 +30,13 @@ class SIR(Model):
         for _ in range(0, initial):
             x = random.randint(0, self.size - 1)
             y = random.randint(0, self.size - 1)
-            while (self.grid[x, y] == self.State.INFECTED):
+            while (self.grid[x, y] == self.State.INFECTIOUS):
                 x = random.randint(0, self.size - 1)
                 y = random.randint(0, self.size - 1)
-            self.grid[x, y] = self.State.INFECTED
+            self.grid[x, y] = self.State.INFECTIOUS
         self.history.append({
             self.State.SUSCEPTIBLE.name: self.size * self.size - initial,
-            self.State.INFECTED.name: initial,
+            self.State.INFECTIOUS.name: initial,
             self.State.RECOVERED.name: 0,
         })
     
@@ -45,11 +45,11 @@ class SIR(Model):
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
             # Sicken
-            infectedCount = neighbours.count(self.State.INFECTED)
+            infectedCount = neighbours.count(self.State.INFECTIOUS)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
-                return self.State.INFECTED
-        elif self.grid[x, y] == self.State.INFECTED:
+                return self.State.INFECTIOUS
+        elif self.grid[x, y] == self.State.INFECTIOUS:
             # Recover
             if random.random() < self.gamma:
                 return self.State.RECOVERED

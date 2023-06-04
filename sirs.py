@@ -12,11 +12,11 @@ class SIRS(SIR):
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
             # Sicken
-            infectedCount = neighbours.count(self.State.INFECTED)
+            infectedCount = neighbours.count(self.State.INFECTIOUS)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
-                return self.State.INFECTED
-        elif self.grid[x, y] == self.State.INFECTED:
+                return self.State.INFECTIOUS
+        elif self.grid[x, y] == self.State.INFECTIOUS:
             # Recover
             if random.random() < self.gamma:
                 return self.State.RECOVERED
