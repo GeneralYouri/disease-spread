@@ -1,4 +1,3 @@
-import numpy as np
 import random
 from enum import IntEnum
 from si import *
@@ -12,24 +11,6 @@ class SIR(SI):
         INFECTIOUS = 1,
         RECOVERED = 2,
     
-    # TODO: Add different starting strategies
-    def initialize(self):
-        self.grid = np.full([self.size, self.size], self.State.SUSCEPTIBLE)
-        
-        # Start by infecting the center cell
-        # self.grid[self.center, self.center] = self.State.INFECTED
-        
-        # Start by infecting 10% of cells randomly
-        initial = round(self.size * self.size / 10)
-        for _ in range(0, initial):
-            x = random.randint(0, self.size - 1)
-            y = random.randint(0, self.size - 1)
-            while (self.grid[x, y] == self.State.INFECTIOUS):
-                x = random.randint(0, self.size - 1)
-                y = random.randint(0, self.size - 1)
-            self.grid[x, y] = self.State.INFECTIOUS
-    
-    # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:

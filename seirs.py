@@ -1,16 +1,20 @@
 import random
-from sir import *
-from sis import *
+from seir import *
+from seis import *
 
 
-class SIRS(SIR, SIS):
+class SEIRS(SEIR, SEIS):
     def updateCell(self, x, y):
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
-            # Sicken
-            infectedCount = neighbours.count(self.State.INFECTIOUS)
+            # Exposure
+            infectedCount = neighbours.count(self.State.EXPOSED)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
+                return self.State.EXPOSED
+        elif self.grid[x, y] == self.State.EXPOSED:
+            # Sicken
+            if random.random() < self.theta:
                 return self.State.INFECTIOUS
         elif self.grid[x, y] == self.State.INFECTIOUS:
             # Recover

@@ -44,6 +44,7 @@ class GetNeighborsFactory:
         ]
 
 
+# Abstract Base Class for the various CA Models for disease spread
 class Model:
     size = 0
     center = 0

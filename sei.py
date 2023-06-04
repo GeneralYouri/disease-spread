@@ -12,7 +12,6 @@ class SEI(SI):
         EXPOSED = 1,
         INFECTIOUS = 0,
     
-    # TODO: Add different starting strategies
     def initialize(self):
         self.grid = np.full([self.size, self.size], self.State.SUSCEPTIBLE)
         
@@ -29,7 +28,6 @@ class SEI(SI):
                 y = random.randint(0, self.size - 1)
             self.grid[x, y] = self.State.EXPOSED
     
-    # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
         neighbours = self.getNeighbours(x, y)
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
