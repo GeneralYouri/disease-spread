@@ -3,9 +3,7 @@ from si import *
 
 
 class SIS(SI):
-    def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
-        super().__init__(neighborStrategy, **settings)
-        self.alpha = settings['alpha']
+    alpha = 0
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):

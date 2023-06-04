@@ -56,16 +56,17 @@ class Model:
         DEFAULT = 0,
 
     def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
-        self.size = settings['size']
+        for name, value in settings.items():
+            setattr(self, name, value)
         self.center = round(self.size / 2)
         self.setNeighborStrategy(neighborStrategy)
 
         self.initialize()
+        self.history.append(self.getCounts())
     
     # Create the initial grid state
     def initialize(self):
         self.grid = np.full([self.size, self.size], self.State.DEFAULT)
-        self.history.append({ 0: self.size * self.size })
     
     # Apply the given neighbor strategy to the model
     def setNeighborStrategy(self, neighborStrategy):
@@ -78,23 +79,29 @@ class Model:
     # Advance the model one step forwards and update all cells
     def step(self):
         nextGrid = np.copy(self.grid)
-        counts = {}
-        for state in self.State:
-            counts[state.name] = 0
         
         for y in range(0, self.size):
             for x in range(0, self.size):
                 newState = self.updateCell(x, y)
                 nextGrid[x, y] = newState
-                counts[self.State(newState).name] += 1
         
         self.grid = nextGrid
-        self.history.append(counts)
+        self.history.append(self.getCounts())
         self.time += 1
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
         return self.grid[x, y]
+    
+    # Count the number of cells in each State in the current grid
+    def getCounts(self):
+        counts = {}
+        for state in self.State:
+            counts[state.name] = 0
+        for y in range(0, self.size):
+            for x in range(0, self.size):
+                counts[self.State(self.grid[x, y]).name] += 1
+        return counts
     
     # Plot summary/history data of the simulation so far
     def plotSummary(self):

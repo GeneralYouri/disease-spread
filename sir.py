@@ -5,6 +5,8 @@ from si import *
 
 
 class SIR(SI):
+    gamma = 0
+
     class State(IntEnum):
         SUSCEPTIBLE = 0,
         INFECTIOUS = 1,
@@ -16,11 +18,6 @@ class SIR(SI):
         
         # Start by infecting the center cell
         # self.grid[self.center, self.center] = self.State.INFECTED
-        # self.history.append({
-        #     self.State.SUSCEPTIBLE.name: size * size - 1,
-        #     self.State.INFECTED.name: 1,
-        #     self.State.RECOVERED.name: 0,
-        # })
         
         # Start by infecting 10% of cells randomly
         initial = round(self.size * self.size / 10)
@@ -31,11 +28,6 @@ class SIR(SI):
                 x = random.randint(0, self.size - 1)
                 y = random.randint(0, self.size - 1)
             self.grid[x, y] = self.State.INFECTIOUS
-        self.history.append({
-            self.State.SUSCEPTIBLE.name: self.size * self.size - initial,
-            self.State.INFECTIOUS.name: initial,
-            self.State.RECOVERED.name: 0,
-        })
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
