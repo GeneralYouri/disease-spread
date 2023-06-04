@@ -2,7 +2,6 @@ import getopt
 import sys
 import time
 from sirs import *
-from visualize import *
 
 
 # Default settings
@@ -39,8 +38,7 @@ except getopt.error as err:
 
 
 # Model execution
-# TODO: Add more state types
-model = SIRS(size, alpha, beta, gamma, NeighborStrategy.NEUMANN)
+model = SIRS(NeighborStrategy.NEUMANN, size=size, alpha=alpha, beta=beta, gamma=gamma)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 

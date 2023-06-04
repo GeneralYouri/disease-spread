@@ -47,8 +47,6 @@ class GetNeighborsFactory:
 class Model:
     size = 0
     center = 0
-    beta = 1 # Infection rate
-    gamma = 1 # Recovery rate
     
     time = 0
     grid = np.empty(0)
@@ -57,11 +55,9 @@ class Model:
     class State(IntEnum):
         DEFAULT = 0,
 
-    def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
-        self.size = size
+    def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
+        self.size = settings['size']
         self.center = round(self.size / 2)
-        self.beta = beta
-        self.gamma = gamma
         self.setNeighborStrategy(neighborStrategy)
 
         self.initialize()
@@ -114,4 +110,4 @@ class Model:
         plt.grid(True)
         timestamp = int(time.time() * 1000)
         plt.savefig(f'plots/plot_summary_{timestamp}')
-        plt.show()
+        # plt.show()

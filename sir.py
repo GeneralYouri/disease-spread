@@ -1,17 +1,14 @@
 import numpy as np
 import random
 from enum import IntEnum
-from model import *
+from si import *
 
 
-class SIR(Model):
+class SIR(SI):
     class State(IntEnum):
         SUSCEPTIBLE = 0,
         INFECTIOUS = 1,
         RECOVERED = 2,
-
-    def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
-        super().__init__(size, beta, gamma, neighborStrategy)
     
     # TODO: Add different starting strategies
     def initialize(self):

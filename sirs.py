@@ -1,11 +1,12 @@
 import random
 from sir import *
+from sis import *
 
 
-class SIRS(SIR):
-    def __init__(self, size, alpha, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
-        super().__init__(size, beta, gamma, neighborStrategy)
-        self.alpha = alpha
+class SIRS(SIR, SIS):
+    def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
+        super().__init__(neighborStrategy, **settings)
+        self.alpha = settings['alpha']
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):

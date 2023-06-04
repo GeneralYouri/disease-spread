@@ -5,12 +5,17 @@ from model import *
 
 
 class SI(Model):
+    beta = 0
+    gamma = 0
+    
     class State(IntEnum):
         SUSCEPTIBLE = 0,
         INFECTIOUS = 1,
 
-    def __init__(self, size, beta = 0, gamma = 0, neighborStrategy = NeighborStrategy.NEUMANN):
-        super().__init__(size, beta, gamma, neighborStrategy)
+    def __init__(self, neighborStrategy = NeighborStrategy.NEUMANN, **settings):
+        super().__init__(neighborStrategy, **settings)
+        self.beta = settings['beta']
+        self.gamma = settings['gamma']
     
     # TODO: Add different starting strategies
     def initialize(self):
