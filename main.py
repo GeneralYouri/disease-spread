@@ -16,12 +16,13 @@ batches = 2 # How many intermediate graphs are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 save = False # Whether to save the result plot as an image
 show = False # Whether to display the result plot on screen
+runToEnd = False # Whether to automatically stop running when the pandemic ends
 
 
 # Input handling
 args = sys.argv[1:]
 options = ''
-longOptions = ['size=', 'alpha=', 'beta=', 'gamma=', 'theta=', 'b=', 'batches=', 's=', 'steps=', 'save', 'show']
+longOptions = ['size=', 'alpha=', 'beta=', 'gamma=', 'theta=', 'b=', 'batches=', 's=', 'steps=', 'save', 'show', 'runToEnd']
 
 try:
     arguments, values = getopt.getopt(args, options, longOptions)
@@ -44,9 +45,12 @@ try:
             save = True
         elif currentArgument in ('--show'):
             show = True
+        elif currentArgument in ('--runToEnd'):
+            runToEnd = True
 except getopt.error as err:
     print(str(err))
     exit()
+
 
 # Model execution
 settings = {
@@ -60,13 +64,18 @@ model = SIR(neighborhood.Strategy.NEUMANN, 1, **settings)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 
-for i in range(1, batches + 1):
+for i in range(0, batches):
     startTime = time.perf_counter()
-    for _ in range(0, stepsPerBatch):
-        model.step()
+    if runToEnd:
+        model.runToEnd(stepsPerBatch)
+    else:
+        for _ in range(0, stepsPerBatch):
+            model.step()
     endTime = time.perf_counter()
-    print(f'Batch {i}: Simulated {stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
+    print(f'Batch {i + 1}: Simulated {model.time - i * stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
     print(f'Grid state: {model.history[-1]}')
+    if model.hasEnded:
+        break
 
 model.plotSummary(save, show)
 print(f'Finished simulation')

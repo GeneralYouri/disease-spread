@@ -15,11 +15,12 @@ class Base:
     size = 0
     center = 0
     
+    hasEnded = False
     time = 0
     grid = np.empty(0)
     history = []
     
-    # Available States in this model
+    # Define the available States in this model
     class State(IntEnum):
         INFECTIOUS = 0,
 
@@ -43,13 +44,15 @@ class Base:
     def initialize(self):
         self.grid = np.full([self.size, self.size], self.State.INFECTIOUS)
     
-    # Count the number of infected cells in the cell's specified neighborhood
-    def countInfectedNeighbors(self, x, y):
-        count = 0
-        for dx, dy in self.neighborhood:
-            if self.grid[(x + dx) % self.size, (y + dy) % self.size] == self.State.INFECTIOUS:
-                count += 1
-        return count
+    # Continuously advance the simulation until the pandemic ends (0 Infectious)
+    def runToEnd(self, maxSteps = 0):
+        if self.hasEnded == True:
+            return
+        for _ in range(0, maxSteps):
+            if self.history[-1][self.State.INFECTIOUS.name] == 0:
+                self.hasEnded = True
+                return
+            self.step()
     
     # Advance the model one step forwards and update all cells
     def step(self):
@@ -67,6 +70,14 @@ class Base:
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
         return self.grid[x, y]
+    
+    # Count the number of infected cells in the cell's specified neighborhood
+    def countInfectedNeighbors(self, x, y):
+        count = 0
+        for dx, dy in self.neighborhood:
+            if self.grid[(x + dx) % self.size, (y + dy) % self.size] == self.State.INFECTIOUS:
+                count += 1
+        return count
     
     # Count the number of cells in each State in the current grid
     def getCounts(self):
@@ -90,7 +101,7 @@ class Base:
         plt.title(f'{self.__class__.__name__} Model')
         plt.legend()
         plt.grid(True)
-        timestamp = int(time.time() * 1000)
+        timestamp = int(time.time())
         if save:
             plt.savefig(f'plots/plot_summary_{timestamp}')
         if show:
