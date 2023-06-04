@@ -1,10 +1,10 @@
 import numpy as np
 import random
 from enum import IntEnum
-from model import *
+from base import *
 
 
-class SI(Model):
+class SI(Base):
     beta = 0
     
     class State(IntEnum):

@@ -7,11 +7,11 @@ import neighborhood
 
 # Plot line colors for visualisation purposes
 # TODO: Better tie these to States
-colors = ['purple', 'red', 'orange']
+colors = ['purple', 'red', 'orange', 'yellow', 'green']
 
 
 # Abstract Base Class for the various CA Models for disease spread
-class Model:
+class Base:
     size = 0
     center = 0
     
@@ -87,7 +87,7 @@ class Model:
             plt.plot(times, counts[state], label=state, color=colors[self.State[state]])
         plt.xlabel('Time')
         plt.ylabel('Proportion')
-        plt.title('SIR Model')
+        plt.title(f'{self.__class__.__name__} Model')
         plt.legend()
         plt.grid(True)
         timestamp = int(time.time() * 1000)
