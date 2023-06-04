@@ -2,6 +2,7 @@ import getopt
 import sys
 import time
 from sirs import *
+from sei import *
 
 
 # Default settings
