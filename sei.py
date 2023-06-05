@@ -1,4 +1,3 @@
-import numpy as np
 import random
 from enum import IntEnum
 from si import *
@@ -11,22 +10,6 @@ class SEI(SI):
         SUSCEPTIBLE = 0,
         EXPOSED = 1,
         INFECTIOUS = 0,
-    
-    def initialize(self):
-        self.grid = np.full([self.size, self.size], self.State.SUSCEPTIBLE)
-        
-        # Start by exposing the center cell
-        # self.grid[self.center, self.center] = self.State.EXPOSED
-        
-        # Start by exposing 10% of cells randomly
-        initial = round(self.size * self.size / 10)
-        for _ in range(0, initial):
-            x = random.randint(0, self.size - 1)
-            y = random.randint(0, self.size - 1)
-            while (self.grid[x, y] == self.State.EXPOSED):
-                x = random.randint(0, self.size - 1)
-                y = random.randint(0, self.size - 1)
-            self.grid[x, y] = self.State.EXPOSED
     
     def updateCell(self, x, y):
         if self.grid[x, y] == self.State.SUSCEPTIBLE:
