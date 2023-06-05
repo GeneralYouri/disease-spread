@@ -28,7 +28,7 @@ class Base:
     hasEnded = False
     time = 0
     grid = np.empty(0)
-    history = []
+    history = np.empty(0)
     
     # Define the available States in this model
     class State(IntEnum):
@@ -38,24 +38,17 @@ class Base:
         for name, value in settings.items():
             setattr(self, name, value)
         self.center = round(self.size / 2)
-        self.setNeighborhood(strategy, r)
+        self.neighborhood = getattr(neighborhood, strategy.value)(r)
 
         self.initialize()
-        self.history.append(self.getCounts())
-    
-    # Define the model's cell neighborhood, from the given strategy and range
-    def setNeighborhood(self, strategy, r):
-        if strategy == neighborhood.Strategy.MOORE:
-            self.neighborhood = neighborhood.moore(r)
-        elif strategy == neighborhood.Strategy.NEUMANN:
-            self.neighborhood = neighborhood.neumann(r)
+        self.history = np.append(self.history, self.getCounts())
     
     # Create the initial grid state
     def initialize(self):
         self.grid = np.full([self.size, self.size], self.State.INFECTIOUS)
     
     # Continuously advance the simulation until the pandemic ends (0 Infectious)
-    def runToEnd(self, maxSteps = 0):
+    def runToEnd(self, maxSteps = 1):
         if self.hasEnded == True:
             return
         for _ in range(0, maxSteps):
@@ -74,7 +67,7 @@ class Base:
                 nextGrid[x, y] = newState
         
         self.grid = nextGrid
-        self.history.append(self.getCounts())
+        self.history = np.append(self.history, self.getCounts())
         self.time += 1
     
     # Calculate the new state for the cell at the given coordinates
@@ -123,6 +116,10 @@ class Base:
         cmap = mc.ListedColormap(colors)
         plt.imshow(self.grid, cmap = cmap, vmax = 5)
         plt.colorbar(orientation = 'vertical', cmap = cmap)
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.title(f'{self.__class__.__name__} Model')
+        plt.grid(True)
         timestamp = int(time.time())
         if save:
             plt.savefig(f'plots/plot_grid_{timestamp}')

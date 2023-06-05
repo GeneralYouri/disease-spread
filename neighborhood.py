@@ -3,11 +3,11 @@ from enum import Enum
 
 # Specify the neighborhood type for the model
 class Strategy(Enum):
-    NEUMANN = 'Neumann',
-    MOORE = 'Moore',
+    NEUMANN = 'Neumann'
+    MOORE = 'Moore'
 
 # Moore; 8-neighborhood
-def moore(r):
+def Moore(r):
     coordinates = []
     for y in range(-r, r + 1):
         for x in range(-r, r + 1):
@@ -17,7 +17,7 @@ def moore(r):
     return coordinates
 
 # Neumann; 4-neighborhood
-def neumann(r):
+def Neumann(r):
     coordinates = []
     for y in range(-r, r + 1):
         for x in range(-r, r + 1):
