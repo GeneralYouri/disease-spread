@@ -2,13 +2,22 @@ import matplotlib.colors as mc
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from enum import IntEnum
+from enum import Enum, IntEnum
 import neighborhood
 
 
 # Plot line colors for visualisation purposes
 # TODO: Better tie these to States
-colors = ['purple', 'red', 'orange', 'yellow', 'green']
+class Colors(Enum):
+    SUSCEPTIBLE = 'purple'
+    INFECTIOUS = 'red'
+    RECOVERED = 'olivedrab'
+    SUPERSPREADER = 'maroon'
+    SUPERSHEDDER = 'coral'
+    HOSPITALIZED = 'dodgerblue'
+    VACCINATED = 'greenyellow'
+    EXPOSED = 'orange'
+    DEAD = 'black'
 
 
 # Abstract Base Class for the various CA Models for disease spread
@@ -23,7 +32,7 @@ class Base:
     
     # Define the available States in this model
     class State(IntEnum):
-        INFECTIOUS = 0,
+        INFECTIOUS = 0
 
     def __init__(self, strategy, r, **settings):
         for name, value in settings.items():
@@ -96,7 +105,7 @@ class Base:
         counts = {state: [t[state] for t in self.history] for state in self.history[0]}
         
         for state in self.history[0]:
-            plt.plot(times, counts[state], label=state, color=colors[self.State[state]])
+            plt.plot(times, counts[state], label=state, color=Colors[state].value)
         plt.xlabel('Time')
         plt.ylabel('Proportion')
         plt.title(f'{self.__class__.__name__} Model')
@@ -110,6 +119,7 @@ class Base:
         plt.close()
 
     def plotGrid(self, save, show):
+        colors = [Colors[state.name].value for state in self.State]
         cmap = mc.ListedColormap(colors)
         plt.imshow(self.grid, cmap = cmap, vmax = 5)
         plt.colorbar(orientation = 'vertical', cmap = cmap)

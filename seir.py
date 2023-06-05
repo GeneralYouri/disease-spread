@@ -7,10 +7,10 @@ class SEIR(SEI):
     gamma = 0
 
     class State(IntEnum):
-        SUSCEPTIBLE = 0,
-        EXPOSED = 1,
-        INFECTIOUS = 2,
-        RECOVERED = 3,
+        SUSCEPTIBLE = 0
+        EXPOSED = 1
+        INFECTIOUS = 2
+        RECOVERED = 3
     
     def updateCell(self, x, y):
         if self.grid[x, y] == self.State.SUSCEPTIBLE:

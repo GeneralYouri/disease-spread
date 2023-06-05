@@ -7,9 +7,9 @@ class SEI(SI):
     delta = 0
     
     class State(IntEnum):
-        SUSCEPTIBLE = 0,
-        EXPOSED = 1,
-        INFECTIOUS = 0,
+        SUSCEPTIBLE = 0
+        EXPOSED = 1
+        INFECTIOUS = 0
     
     def updateCell(self, x, y):
         if self.grid[x, y] == self.State.SUSCEPTIBLE:

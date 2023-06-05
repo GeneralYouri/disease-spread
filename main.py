@@ -64,7 +64,7 @@ settings = {
     'delta': delta,
     'epsilon': epsilon,
 }
-model = SEIRS(neighborhood.Strategy.NEUMANN, 1, **settings)
+model = SIRS(neighborhood.Strategy.NEUMANN, 1, **settings)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 

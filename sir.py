@@ -7,9 +7,9 @@ class SIR(SI):
     gamma = 0
 
     class State(IntEnum):
-        SUSCEPTIBLE = 0,
-        INFECTIOUS = 1,
-        RECOVERED = 2,
+        SUSCEPTIBLE = 0
+        INFECTIOUS = 1
+        RECOVERED = 2
     
     def updateCell(self, x, y):
         if self.grid[x, y] == self.State.SUSCEPTIBLE:

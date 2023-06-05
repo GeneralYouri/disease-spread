@@ -8,8 +8,8 @@ class SI(Base):
     beta = 0
     
     class State(IntEnum):
-        SUSCEPTIBLE = 0,
-        INFECTIOUS = 1,
+        SUSCEPTIBLE = 0
+        INFECTIOUS = 1
     
     # TODO: Add different starting strategies
     def initialize(self):
