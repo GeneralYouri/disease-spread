@@ -64,7 +64,7 @@ settings = {
     'delta': delta,
     'epsilon': epsilon,
 }
-model = SIR(neighborhood.Strategy.NEUMANN, 1, **settings)
+model = SEIRS(neighborhood.Strategy.NEUMANN, 1, **settings)
 print(f'Created model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 
@@ -84,4 +84,5 @@ for i in range(0, batches):
 
 # Model output
 model.plotSummary(save, show)
+model.plotGrid(save, show)
 print(f'Finished simulation')

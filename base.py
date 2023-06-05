@@ -1,3 +1,4 @@
+import matplotlib.colors as mc
 import matplotlib.pyplot as plt
 import numpy as np
 import time
@@ -90,7 +91,7 @@ class Base:
         return counts
     
     # Plot summary/history data of the simulation so far
-    def plotSummary(self, save = True, show = False):
+    def plotSummary(self, save, show):
         times = range(0, len(self.history))
         counts = {state: [t[state] for t in self.history] for state in self.history[0]}
         
@@ -106,3 +107,15 @@ class Base:
             plt.savefig(f'plots/plot_summary_{timestamp}')
         if show:
             plt.show()
+        plt.close()
+
+    def plotGrid(self, save, show):
+        cmap = mc.ListedColormap(colors)
+        plt.imshow(self.grid, cmap = cmap, vmax = 5)
+        plt.colorbar(orientation = 'vertical', cmap = cmap)
+        timestamp = int(time.time())
+        if save:
+            plt.savefig(f'plots/plot_grid_{timestamp}')
+        if show:
+            plt.show()
+        plt.close()
