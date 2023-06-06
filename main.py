@@ -15,18 +15,18 @@ beta = 0.2 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
-maxbeds = 0.05 * size ** 2
-batches = 2 # How many intermediate graphs are generated
+maxBeds = 0.05 * size ** 2 # The maximum allowed number of Hospitalized cells 
+batches = 5 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends
-save = False # Whether to save the result plot as an image
-show = False # Whether to display the result plot on screen
+save = False # Whether to save the result plots as images
+show = False # Whether to display the result plots on screen
 
 
 # Input handling
 args = sys.argv[1:]
 options = ''
-longOptions = ['type=', 'size=', 'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'maxbeds=', 'batches=', 'steps=', 'runToEnd', 'save', 'show']
+longOptions = ['type=', 'size=', 'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'maxBeds=', 'batches=', 'stepsPerBatch=', 'runToEnd', 'save', 'show']
 
 try:
     arguments, values = getopt.getopt(args, options, longOptions)
@@ -45,11 +45,11 @@ try:
             delta = float(currentValue)
         elif currentArgument in ('--epsilon'):
             epsilon = float(currentValue)
-        elif currentArgument in ('--maxbeds'):
-            maxbeds = float(currentValue)
+        elif currentArgument in ('--maxBeds'):
+            maxBeds = float(currentValue)
         elif currentArgument in ('--batches'):
             batches = int(currentValue)
-        elif currentArgument in ('--steps'):
+        elif currentArgument in ('--stepsPerBatch'):
             stepsPerBatch = int(currentValue)
         elif currentArgument in ('--runToEnd'):
             runToEnd = True
@@ -71,7 +71,7 @@ settings = {
     'gamma': gamma,
     'delta': delta,
     'epsilon': epsilon,
-    'maxbeds': maxbeds,
+    'maxBeds': maxBeds,
 }
 model = globals()[type](neighborhood.Strategy.NEUMANN, 1, **settings)
 print(f'Created {model.__class__.__name__} model with size {size} and infection rate {beta} and recovery rate {gamma}')

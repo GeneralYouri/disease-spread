@@ -5,7 +5,7 @@ from sihr import *
 class SIHRD(SIHR):
     epsilon = 0
     beds = 0
-    maxbeds = 0
+    maxBeds = 0
 
     class State(IntEnum):
         SUSCEPTIBLE = 0
@@ -24,7 +24,7 @@ class SIHRD(SIHR):
         elif self.grid[x, y] == self.State.INFECTIOUS:
             # Hospitalize
             if random.random() < self.epsilon:
-                if self.beds < self.maxbeds:
+                if self.beds < self.maxBeds:
                     self.beds += 1
                     return self.State.HOSPITALIZED
                 else:
