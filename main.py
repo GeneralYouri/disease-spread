@@ -8,6 +8,7 @@ from sihrd import *
 
 
 # Default settings
+type = 'SIHRD' # The model type to simulate
 size = 75 # The size of the square grid
 alpha = 0.05 # Re-Susceptibility rate R->S
 beta = 0.2 # Infection rate S->I | S->E
@@ -25,13 +26,15 @@ show = False # Whether to display the result plot on screen
 # Input handling
 args = sys.argv[1:]
 options = ''
-longOptions = ['size=', 'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'maxbeds=', 'batches=', 'steps=', 'runToEnd', 'save', 'show']
+longOptions = ['type=', 'size=', 'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'maxbeds=', 'batches=', 'steps=', 'runToEnd', 'save', 'show']
 
 try:
     arguments, values = getopt.getopt(args, options, longOptions)
     for currentArgument, currentValue in arguments:
-        if currentArgument in ('--size'):
-            size = int(currentValue)
+        if currentArgument in ('--type'):
+            type = str(currentValue)
+        elif currentArgument in ('--size'):
+            size = float(currentValue)
         elif currentArgument in ('--alpha'):
             gamma = float(currentValue)
         elif currentArgument in ('--beta'):
@@ -69,7 +72,7 @@ settings = {
     'epsilon': epsilon,
     'maxbeds': maxbeds,
 }
-model = SIHRD(neighborhood.Strategy.NEUMANN, 1, **settings)
+model = globals()[type](neighborhood.Strategy.NEUMANN, 1, **settings)
 print(f'Created {model.__class__.__name__} model with size {size} and infection rate {beta} and recovery rate {gamma}')
 print(f'Grid state: {model.history[-1]}')
 
