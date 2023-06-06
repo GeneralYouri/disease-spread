@@ -16,7 +16,7 @@ gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
 maxBeds = 0.05 * size ** 2 # The maximum allowed number of Hospitalized cells 
-batches = 5 # How many intermediate results are generated
+batches = 0 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends
 save = False # Whether to save the result plots as images
@@ -60,6 +60,8 @@ try:
 except getopt.error as err:
     print(str(err))
     exit()
+if batches == 0:
+    batches = 1 << 31
 
 
 # Model creation
