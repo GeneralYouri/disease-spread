@@ -9,12 +9,12 @@ from sihrd import *
 
 # Default settings
 type = 'SIHRD' # The model type to simulate
-size = 75 # The size of the square grid
+size = 100 # The size of the square grid
 alpha = 0.05 # Re-Susceptibility rate R->S
 beta = 0.2 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
-epsilon = 0.2 * gamma # Hospitalization rate I->H
+epsilon = 0.3 * gamma # Hospitalization rate I->H
 maxbeds = 0.05 * size ** 2
 batches = 2 # How many intermediate graphs are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
@@ -63,6 +63,7 @@ except getopt.error as err:
 
 
 # Model creation
+startTimeGlobal = time.perf_counter()
 settings = {
     'size': size,
     'alpha': alpha,
@@ -91,6 +92,7 @@ for i in range(0, batches):
     print(f'Grid state: {model.history[-1]}')
 
 # Model output
+endTimeGlobal = time.perf_counter()
 model.plotSummary(save, show)
 model.plotGrid(save, show)
-print(f'Finished simulation')
+print(f'Simulation finished after {model.time} steps and {endTimeGlobal - startTimeGlobal:.2f} seconds')

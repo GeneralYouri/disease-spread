@@ -9,6 +9,8 @@ A CA model for researching epidemic disease spread and the factors that affect i
 Goal is to be able to compose State Transitions from different features.
 A feature would be "Recovery" which adds the State Recovered and the Transition I->R.
 
+## Maybes
+- ? Add a way to randomise the location of all cells in the grid. Use it to randomise the full grid every time step, while retaining total counts for each State. Could be useful for comparing to the ODE model.
 - ? Create a way to export grid data for visualisations.
 - ? Create a way to import grid data for usage across experiments.
 - X Look into njit for performance improvements.

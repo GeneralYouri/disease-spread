@@ -13,7 +13,7 @@ class SI(Base):
     
     # TODO: Add different starting strategies
     def initialize(self):
-        self.grid = np.full([self.size, self.size], self.State.SUSCEPTIBLE)
+        self.grid = np.full((self.size, self.size), self.State.SUSCEPTIBLE)
         
         # Start by infecting the center cell
         # self.grid[self.center, self.center] = self.State.INFECTED

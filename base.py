@@ -7,7 +7,6 @@ import neighborhood
 
 
 # Plot line colors for visualisation purposes
-# TODO: Better tie these to States
 class Colors(Enum):
     SUSCEPTIBLE = 'purple'
     INFECTIOUS = 'red'
@@ -27,7 +26,7 @@ class Base:
     
     hasEnded = False
     time = 0
-    grid = np.empty(0)
+    grid = np.empty((0, 0))
     history = np.empty(0)
     
     # Define the available States in this model
@@ -45,7 +44,7 @@ class Base:
     
     # Create the initial grid state
     def initialize(self):
-        self.grid = np.full([self.size, self.size], self.State.INFECTIOUS)
+        self.grid = np.full((self.size, self.size), self.State.INFECTIOUS)
     
     # Continuously advance the simulation until the pandemic ends (0 Infectious)
     def runToEnd(self, maxSteps = 1):
@@ -100,14 +99,14 @@ class Base:
         for state in self.history[0]:
             plt.plot(times, counts[state], label=state, color=Colors[state].value)
         plt.xlabel('Time')
-        plt.ylabel('Proportion')
+        plt.ylabel('Amount')
         plt.title(f'{self.__class__.__name__} Model')
         plt.legend()
         plt.grid(True)
         
         timestamp = int(time.time())
         if save:
-            plt.savefig(f'plots/plot_summary_{timestamp}')
+            plt.savefig(f'plots/summary_{timestamp}')
         if show:
             plt.show()
         plt.close()
@@ -122,17 +121,17 @@ class Base:
         heatmap = ax.pcolor(self.grid, cmap = cmap, vmax = len(self.State))
         cbar = plt.colorbar(heatmap)
         cbar.ax.get_yaxis().set_ticks([])
-        for i, lab in enumerate(self.State):
-            cbar.ax.text(1.5, i + 0.5, lab.name, ha = 'left', va='center')
+        for i, state in enumerate(self.State):
+            cbar.ax.text(1.5, i + 0.5, state.name, ha = 'left', va='center')
         
         plt.xlabel('X')
         plt.ylabel('Y')
         plt.title(f'{self.__class__.__name__} Model')
         plt.grid(True)
-
+        
         timestamp = int(time.time())
         if save:
-            plt.savefig(f'plots/plot_grid_{timestamp}')
+            plt.savefig(f'plots/grid_{timestamp}')
         if show:
             plt.show()
         plt.close()
