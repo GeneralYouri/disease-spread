@@ -104,6 +104,7 @@ class Base:
         plt.title(f'{self.__class__.__name__} Model')
         plt.legend()
         plt.grid(True)
+        
         timestamp = int(time.time())
         if save:
             plt.savefig(f'plots/plot_summary_{timestamp}')
@@ -114,12 +115,21 @@ class Base:
     def plotGrid(self, save, show):
         colors = [Colors[state.name].value for state in self.State]
         cmap = mc.ListedColormap(colors)
-        plt.imshow(self.grid, cmap = cmap, vmax = 5)
-        plt.colorbar(orientation = 'vertical', cmap = cmap)
+        # plt.imshow(self.grid, cmap = cmap, vmax = len(self.State))
+        
+        # Customize colorbar to include State names
+        fig, ax = plt.subplots()
+        heatmap = ax.pcolor(self.grid, cmap = cmap, vmax = len(self.State))
+        cbar = plt.colorbar(heatmap)
+        cbar.ax.get_yaxis().set_ticks([])
+        for i, lab in enumerate(self.State):
+            cbar.ax.text(1.5, i + 0.5, lab.name, ha = 'left', va='center')
+        
         plt.xlabel('X')
         plt.ylabel('Y')
         plt.title(f'{self.__class__.__name__} Model')
         plt.grid(True)
+
         timestamp = int(time.time())
         if save:
             plt.savefig(f'plots/plot_grid_{timestamp}')
