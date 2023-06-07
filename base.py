@@ -118,7 +118,7 @@ class Base:
         
         # Customize colorbar to include State names
         fig, ax = plt.subplots()
-        heatmap = ax.pcolor(self.grid, cmap = cmap, vmax = len(self.State))
+        heatmap = ax.pcolor(self.grid, cmap = cmap, vmin = 0, vmax = len(self.State))
         cbar = plt.colorbar(heatmap)
         cbar.ax.get_yaxis().set_ticks([])
         for i, state in enumerate(self.State):
