@@ -9,7 +9,6 @@ from sihrd import *
 # Model creation
 startTimeGlobal = time.perf_counter()
 model = globals()[settings.type](modelSettings)
-#print(f'Created {model.__class__.__name__} model with size {modelSettings.size} and infection rate {modelSettings.beta} and recovery rate {modelSettings.gamma}')
 print(f'Init state: {model.history[-1]}')
 
 # Model execution

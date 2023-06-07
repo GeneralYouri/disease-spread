@@ -1,12 +1,27 @@
 import getopt
 import sys
+from enum import Enum
 from neighborhood import Strategy
 
 
+# Allowed Model types
+class Type(Enum):
+    SI = 'SI'
+    SIS = 'SIS'
+    SIR = 'SIR'
+    SIRS = 'SIRS'
+    SEI = 'SEI'
+    SEIS = 'SEIS'
+    SEIR = 'SEIR'
+    SEIRS = 'SEIRS'
+    SIHR = 'SIHR'
+    SIHRD = 'SIHRD'
+
+
 # Default settings
-type = 'SIHRD' # The model type to simulate
+type = Type.SIHRD.value # The model type to simulate
 size = 100 # The size of the square grid
-neighborhood = 'Neumann' # The name of the neighborhood type
+neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
 alpha = 0.05 # Re-Susceptibility rate R->S
 beta = 0.2 # Infection rate S->I | S->E
@@ -30,11 +45,11 @@ try:
     arguments, values = getopt.getopt(args, options, longOptions)
     for currentArgument, currentValue in arguments:
         if currentArgument in ('--type'):
-            type = str(currentValue)
+            type = Type(currentValue).value
         elif currentArgument in ('--size'):
             size = float(currentValue)
         elif currentArgument in ('--neighborhood'):
-            neighborhood = Strategy(currentValue)
+            neighborhood = Strategy(currentValue).value
         elif currentArgument in ('--range'):
             range = int(currentValue)
         elif currentArgument in ('--alpha'):
