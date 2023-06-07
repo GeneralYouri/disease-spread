@@ -1,22 +1,6 @@
-import matplotlib.colors as mc
-import matplotlib.pyplot as plt
 import numpy as np
-import time
-from enum import Enum, IntEnum
+from enum import IntEnum
 import neighborhood
-
-
-# Plot line colors for visualisation purposes
-class Colors(Enum):
-    SUSCEPTIBLE = 'purple'
-    INFECTIOUS = 'red'
-    RECOVERED = 'olivedrab'
-    SUPERSPREADER = 'maroon'
-    SUPERSHEDDER = 'coral'
-    HOSPITALIZED = 'dodgerblue'
-    VACCINATED = 'greenyellow'
-    EXPOSED = 'orange'
-    DEAD = 'black'
 
 
 # Abstract Base Class for the various CA Models for disease spread
@@ -29,7 +13,7 @@ class Base:
     grid = np.empty((0, 0))
     history = np.empty(0)
     
-    # Define the available States in this model
+    # Available Cell States for this Model
     class State(IntEnum):
         INFECTIOUS = 0
 
@@ -90,48 +74,3 @@ class Base:
             for x in range(0, self.size):
                 counts[self.State(self.grid[x, y]).name] += 1
         return counts
-    
-    # Plot summary/history data of the simulation so far
-    def plotSummary(self, save, show):
-        times = range(0, len(self.history))
-        counts = {state: [t[state] for t in self.history] for state in self.history[0]}
-        
-        for state in self.history[0]:
-            plt.plot(times, counts[state], label=state, color=Colors[state].value)
-        plt.xlabel('Time')
-        plt.ylabel('Amount')
-        plt.title(f'{self.__class__.__name__} Model')
-        plt.legend()
-        plt.grid(True)
-        
-        timestamp = int(time.time())
-        if save:
-            plt.savefig(f'plots/summary_{timestamp}')
-        if show:
-            plt.show()
-        plt.close()
-
-    def plotGrid(self, save, show):
-        colors = [Colors[state.name].value for state in self.State]
-        cmap = mc.ListedColormap(colors)
-        # plt.imshow(self.grid, cmap = cmap, vmax = len(self.State))
-        
-        # Customize colorbar to include State names
-        fig, ax = plt.subplots()
-        heatmap = ax.pcolor(self.grid, cmap = cmap, vmin = 0, vmax = len(self.State))
-        cbar = plt.colorbar(heatmap)
-        cbar.ax.get_yaxis().set_ticks([])
-        for i, state in enumerate(self.State):
-            cbar.ax.text(1.5, i + 0.5, state.name, ha = 'left', va='center')
-        
-        plt.xlabel('X')
-        plt.ylabel('Y')
-        plt.title(f'{self.__class__.__name__} Model')
-        plt.grid(True)
-        
-        timestamp = int(time.time())
-        if save:
-            plt.savefig(f'plots/grid_{timestamp}')
-        if show:
-            plt.show()
-        plt.close()

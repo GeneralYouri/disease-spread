@@ -4,6 +4,7 @@ from input import settings, modelSettings
 from sirs import *
 from seirs import *
 from sihrd import *
+import plot
 
 
 # Model creation
@@ -27,8 +28,8 @@ for i in range(0, settings.batches):
 
 # Model output
 endTimeGlobal = time.perf_counter()
-model.plotSummary(settings.save, settings.show)
-model.plotGrid(settings.save, settings.show)
 print(f'{model.__class__.__name__} Model Settings used:')
 print(tabulate(modelSettings.__dict__.items()))
 print(f'Simulation finished after {model.time} steps and {endTimeGlobal - startTimeGlobal:.2f} seconds')
+plot.summary(model, settings.save, settings.show)
+plot.grid(model, settings.save, settings.show)
