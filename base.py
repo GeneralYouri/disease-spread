@@ -33,11 +33,11 @@ class Base:
     class State(IntEnum):
         INFECTIOUS = 0
 
-    def __init__(self, strategy, r, **settings):
-        for name, value in settings.items():
+    def __init__(self, settings):
+        for name, value in settings.__dict__.items():
             setattr(self, name, value)
         self.center = round(self.size / 2)
-        self.neighborhood = getattr(neighborhood, strategy.value)(r)
+        self.neighborhood = getattr(neighborhood, self.neighborhood)(self.range)
 
         self.initialize()
         self.history = np.append(self.history, self.getCounts())
