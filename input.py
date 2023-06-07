@@ -66,6 +66,7 @@ if batches == 0:
     batches = 1 << 31
 
 
+# Output
 class Settings:
     def __init__(self, *args, **kwargs):
         for k, v in kwargs.items():

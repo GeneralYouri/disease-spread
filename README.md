@@ -1,7 +1,7 @@
 # Disease Spread
 A CA model for researching pandemic disease spread and the factors that affect it
 
-A command line interface allows running a variety of different models with different features, with settings to further customize the model.
+A command line interface allows simulating a variety of different models with different features, with settings to further customize the simulation.
 #
 
 ## Usage

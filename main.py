@@ -1,5 +1,5 @@
 import time
-import neighborhood
+from tabulate import tabulate
 from input import settings, modelSettings
 from sirs import *
 from seirs import *
@@ -9,8 +9,8 @@ from sihrd import *
 # Model creation
 startTimeGlobal = time.perf_counter()
 model = globals()[settings.type](modelSettings)
-print(f'Created {model.__class__.__name__} model with size {modelSettings.size} and infection rate {modelSettings.beta} and recovery rate {modelSettings.gamma}')
-print(f'Grid state: {model.history[-1]}')
+#print(f'Created {model.__class__.__name__} model with size {modelSettings.size} and infection rate {modelSettings.beta} and recovery rate {modelSettings.gamma}')
+print(f'Init state: {model.history[-1]}')
 
 # Model execution
 for i in range(0, settings.batches):
@@ -30,4 +30,6 @@ for i in range(0, settings.batches):
 endTimeGlobal = time.perf_counter()
 model.plotSummary(settings.save, settings.show)
 model.plotGrid(settings.save, settings.show)
+print(f'{model.__class__.__name__} Model Settings used:')
+print(tabulate(modelSettings.__dict__.items()))
 print(f'Simulation finished after {model.time} steps and {endTimeGlobal - startTimeGlobal:.2f} seconds')
