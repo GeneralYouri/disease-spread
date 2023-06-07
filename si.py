@@ -30,12 +30,13 @@ class SI(Base):
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
-        if self.grid[x, y] == self.State.SUSCEPTIBLE:
+        cell = self.grid[x, y]
+        if cell == self.State.SUSCEPTIBLE:
             # Sicken
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.INFECTIOUS
-        elif self.grid[x, y] == self.State.INFECTIOUS:
+        elif cell == self.State.INFECTIOUS:
             pass
-        return self.grid[x, y]
+        return cell

@@ -13,20 +13,21 @@ class SEIR(SEI):
         RECOVERED = 3
     
     def updateCell(self, x, y):
-        if self.grid[x, y] == self.State.SUSCEPTIBLE:
+        cell = self.grid[x, y]
+        if cell == self.State.SUSCEPTIBLE:
             # Exposure
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.EXPOSED
-        elif self.grid[x, y] == self.State.EXPOSED:
+        elif cell == self.State.EXPOSED:
             # Sicken
             if random.random() < self.delta:
                 return self.State.INFECTIOUS
-        elif self.grid[x, y] == self.State.INFECTIOUS:
+        elif cell == self.State.INFECTIOUS:
             # Recover
             if random.random() < self.gamma:
                 return self.State.RECOVERED
-        elif self.grid[x, y] == self.State.RECOVERED:
+        elif cell == self.State.RECOVERED:
             pass
-        return self.grid[x, y]
+        return cell

@@ -12,25 +12,26 @@ class SIHR(SIR):
         RECOVERED = 3
     
     def updateCell(self, x, y):
-        if self.grid[x, y] == self.State.SUSCEPTIBLE:
+        cell = self.grid[x, y]
+        if cell == self.State.SUSCEPTIBLE:
             # Sicken
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
                 return self.State.INFECTIOUS
-        elif self.grid[x, y] == self.State.INFECTIOUS:
+        elif cell == self.State.INFECTIOUS:
             # Hospitalize
             if random.random() < self.epsilon:
                 return self.State.HOSPITALIZED
             # Recover
             if random.random() < self.gamma:
                 return self.State.RECOVERED
-        elif self.grid[x, y] == self.State.HOSPITALIZED:
+        elif cell == self.State.HOSPITALIZED:
             # Recover
             if random.random() < self.gamma / 2:
                 return self.State.RECOVERED
-        elif self.grid[x, y] == self.State.RECOVERED:
+        elif cell == self.State.RECOVERED:
             # Re-susceptibility
             if random.random() < self.alpha:
                 return self.State.SUSCEPTIBLE
-        return self.grid[x, y]
+        return cell
