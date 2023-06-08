@@ -31,7 +31,5 @@ class SIHR(SIR):
             if random.random() < self.gamma / 2:
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
-            # Re-susceptibility
-            if random.random() < self.alpha:
-                return self.State.SUSCEPTIBLE
+            pass
         return cell

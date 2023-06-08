@@ -39,7 +39,9 @@ class SIHRD(SIHR):
                 self.beds -= 1
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
-            pass
+            # Re-susceptibility
+            if random.random() < self.alpha:
+                return self.State.SUSCEPTIBLE
         elif cell == self.State.DEAD:
             pass
         return cell
