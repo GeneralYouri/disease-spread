@@ -27,6 +27,8 @@ class Base:
         self.neighborhood = getattr(neighborhood, self.neighborhood)(self.range)
         # Adjust beta to account for neighborhood
         self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
+        # Apply the maxBeds fraction to the model size and get a flat amount
+        self.maxBeds = self.maxBeds * self.size ** 2
         
         self.initialize()
         self.history = np.append(self.history, self.getCounts())

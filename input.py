@@ -19,7 +19,7 @@ class Type(Enum):
 
 
 # Default settings
-type = Type.SIHRD.value # The model type to simulate
+type = Type.SIR.value # The model type to simulate
 size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
@@ -28,7 +28,7 @@ beta = 0.7 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
-maxBeds = 0.05 * size ** 2 # The maximum allowed number of Hospitalized cells 
+maxBeds = 0.05 # The maximum allowed number of Hospitalized cells 
 batches = 0 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends
