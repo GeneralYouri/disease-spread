@@ -20,7 +20,7 @@ class Type(Enum):
 
 # Default settings
 type = Type.SIR.value # The model type to simulate
-size = 100 # The size of the square grid
+size = 50 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
 alpha = 0.05 # Re-Susceptibility rate R->S
@@ -28,6 +28,8 @@ beta = 0.7 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
+interventionFactor = 1.0 # Adjusted infection rate to be applied later during the simulation
+interventionDelay = 100 # The time after which beta2 replaces beta as the infection rate
 maxBeds = 0.05 # The maximum allowed number of Hospitalized cells 
 batches = 0 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
@@ -39,7 +41,12 @@ show = False # Whether to display the result plots on screen
 # Input handling
 args = sys.argv[1:]
 options = ''
-longOptions = ['type=', 'size=', 'neighborhood=', 'range=', 'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'maxBeds=', 'batches=', 'stepsPerBatch=', 'runToEnd', 'save', 'show']
+longOptions = [
+    'type=', 'size=', 'neighborhood=', 'range=',
+    'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=',
+    'interventionFactor=', 'interventionDelay=', 'maxBeds=',
+    'batches=', 'stepsPerBatch=', 'runToEnd', 'save', 'show'
+]
 
 try:
     arguments, values = getopt.getopt(args, options, longOptions)
@@ -62,6 +69,10 @@ try:
             delta = float(currentValue)
         elif currentArgument in ('--epsilon'):
             epsilon = float(currentValue)
+        elif currentArgument in ('--interventionFactor'):
+            interventionFactor = float(currentValue)
+        elif currentArgument in ('--interventionDelay'):
+            interventionDelay = float(currentValue)
         elif currentArgument in ('--maxBeds'):
             maxBeds = float(currentValue)
         elif currentArgument in ('--batches'):
@@ -90,6 +101,7 @@ class Settings:
 modelSettings = Settings(
     size=size, neighborhood=neighborhood, range=range,
     alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon,
+    interventionFactor=interventionFactor, interventionDelay=interventionDelay,
     maxBeds=maxBeds,
 )
 settings = Settings(

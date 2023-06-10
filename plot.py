@@ -23,6 +23,8 @@ def summary(model, save, show):
     
     for state in model.history[0]:
         plt.plot(times, counts[state], label=state, color=Colors[state].value)
+    if model.interventionFactor != 1.0 and len(times) > model.interventionDelay:
+        plt.axvline(model.interventionDelay, linestyle='--', label='Intervention')
     plt.yscale('log', base=2)
     plt.xlabel('Time')
     plt.ylabel('Amount')
