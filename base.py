@@ -59,6 +59,12 @@ class Base:
         self.grid = nextGrid
         self.history = np.append(self.history, self.getCounts())
         self.time += 1
+        
+        # Intervention
+        if self.time == self.interventionDelay:
+            self.beta = 1 - (1 - self.beta) ** len(self.neighborhood)
+            self.beta *= self.interventionFactor
+            self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
