@@ -23,6 +23,7 @@ def summary(model, save, show):
     
     for state in model.history[0]:
         plt.plot(times, counts[state], label=state, color=Colors[state].value)
+    plt.yscale('log')
     plt.xlabel('Time')
     plt.ylabel('Amount')
     plt.title(f'{model.__class__.__name__} Model')
@@ -33,17 +34,16 @@ def summary(model, save, show):
     if save:
         plt.savefig(f'plots/summary_{timestamp}')
     if show:
-        plt.show()
-    plt.close('all')
+        plt.show(block=False)
 
+# Plot the current grid State in the simulation
 def grid(model, save, show):
     colors = [Colors[state.name].value for state in model.State]
     cmap = mc.ListedColormap(colors)
-    # plt.imshow(self.grid, cmap = cmap, vmax = len(self.State))
     
     # Customize colorbar to include State names
     fig, ax = plt.subplots()
-    heatmap = ax.pcolor(model.grid, cmap = cmap, vmin = 0, vmax = len(model.State))
+    heatmap = ax.pcolorfast(model.grid, cmap = cmap, vmin = 0, vmax = len(model.State))
     cbar = plt.colorbar(heatmap)
     cbar.ax.get_yaxis().set_ticks([])
     for i, state in enumerate(model.State):
