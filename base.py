@@ -27,7 +27,6 @@ class Base:
         self.neighborhood = getattr(neighborhood, self.neighborhood)(self.range)
         # Adjust beta to account for neighborhood
         self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
-        print(self.beta)
         
         self.initialize()
         self.history = np.append(self.history, self.getCounts())

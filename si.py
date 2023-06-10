@@ -16,17 +16,17 @@ class SI(Base):
         self.grid = np.full((self.size, self.size), self.State.SUSCEPTIBLE)
         
         # Start by infecting the center cell
-        # self.grid[self.center, self.center] = self.State.INFECTED
+        self.grid[self.center - 1 : self.center + 2, self.center - 1 : self.center + 2] = self.State.INFECTIOUS
         
         # Start by infecting 10% of cells randomly
-        initial = round(self.size * self.size / 10)
-        for _ in range(0, initial):
-            x = random.randint(0, self.size - 1)
-            y = random.randint(0, self.size - 1)
-            while (self.grid[x, y] == self.State.INFECTIOUS):
-                x = random.randint(0, self.size - 1)
-                y = random.randint(0, self.size - 1)
-            self.grid[x, y] = self.State.INFECTIOUS
+        # initial = round(self.size * self.size / 10)
+        # for _ in range(0, initial):
+        #     x = random.randint(0, self.size - 1)
+        #     y = random.randint(0, self.size - 1)
+        #     while (self.grid[x, y] == self.State.INFECTIOUS):
+        #         x = random.randint(0, self.size - 1)
+        #         y = random.randint(0, self.size - 1)
+        #     self.grid[x, y] = self.State.INFECTIOUS
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
