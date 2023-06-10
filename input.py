@@ -24,7 +24,7 @@ size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
 alpha = 0.05 # Re-Susceptibility rate R->S
-beta = 0.2 # Infection rate S->I | S->E
+beta = 0.6 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
@@ -77,11 +77,12 @@ try:
 except getopt.error as err:
     print(str(err))
     exit()
+# Infinite batches
 if batches == 0:
     batches = 1 << 31
 
 
-# Output
+# Output Settings
 class Settings:
     def __init__(self, *args, **kwargs):
         for k, v in kwargs.items():

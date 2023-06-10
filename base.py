@@ -20,9 +20,15 @@ class Base:
     def __init__(self, settings):
         for name, value in settings.__dict__.items():
             setattr(self, name, value)
+        
+        ## Post-processing
         self.center = round(self.size / 2)
+        # Compute neighborhood
         self.neighborhood = getattr(neighborhood, self.neighborhood)(self.range)
-
+        # Adjust beta to account for neighborhood
+        self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
+        print(self.beta)
+        
         self.initialize()
         self.history = np.append(self.history, self.getCounts())
     
