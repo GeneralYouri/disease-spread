@@ -23,7 +23,7 @@ def summary(model, save, show):
     
     for state in model.history[0]:
         plt.plot(times, counts[state], label=state, color=Colors[state].value)
-    plt.yscale('log')
+    plt.yscale('log', base=2)
     plt.xlabel('Time')
     plt.ylabel('Amount')
     plt.title(f'{model.__class__.__name__} Model')
