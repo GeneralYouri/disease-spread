@@ -29,7 +29,7 @@ def summary(model, settings):
         plt.axvline(model.interventionDelay, linestyle='--', label='INTERVENTION')
     
     if settings.logPlot:
-        plt.yscale('log', base=2)
+        plt.yscale('log', base=10)
     
     plt.xlabel('Time')
     plt.ylabel('Amount')

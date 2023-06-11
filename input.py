@@ -24,7 +24,7 @@ class Type(Enum):
 
 # Default settings
 type = Type.SIR.value # The model type to simulate
-size = 50 # The size of the square grid
+size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
 alpha = 0.05 # Re-Susceptibility rate R->S
