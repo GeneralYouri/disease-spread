@@ -15,7 +15,9 @@ class Type(Enum):
     SEIR = 'SEIR'
     SEIRS = 'SEIRS'
     SIHR = 'SIHR'
+    SIHRS = 'SIHRS'
     SIHRD = 'SIHRD'
+    SIHRDS = 'SIHRDS'
 
 
 # Default settings
@@ -30,7 +32,7 @@ delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
 interventionFactor = 1.0 # Adjusted infection rate to be applied later during the simulation
 interventionDelay = 100 # The time after which beta2 replaces beta as the infection rate
-maxBeds = 0.05 # The maximum allowed number of Hospitalized cells 
+maxBeds = 0.05 # The maximum allowed number of Hospitalized cells
 batches = 0 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends

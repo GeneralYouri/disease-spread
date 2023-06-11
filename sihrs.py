@@ -1,16 +1,8 @@
 import random
-from sir import *
+from sihr import *
 
 
-class SIHR(SIR):
-    epsilon = 0
-
-    class State(IntEnum):
-        SUSCEPTIBLE = 0
-        INFECTIOUS = 1
-        HOSPITALIZED = 2
-        RECOVERED = 3
-    
+class SIHRS(SIHR):
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
