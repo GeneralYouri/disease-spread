@@ -17,7 +17,7 @@ class Colors(Enum):
     DEAD = 'black'
 
 # Plot summary/history data of the simulation so far
-def summary(model, save, show):
+def summary(model, settings):
     times = range(0, len(model.history))
     counts = {state: [t[state] for t in model.history] for state in model.history[0]}
     
@@ -28,7 +28,9 @@ def summary(model, save, show):
     if model.interventionFactor != 1.0 and len(times) > model.interventionDelay:
         plt.axvline(model.interventionDelay, linestyle='--', label='INTERVENTION')
     
-    plt.yscale('log', base=2)
+    if settings.logPlot:
+        plt.yscale('log', base=2)
+    
     plt.xlabel('Time')
     plt.ylabel('Amount')
     plt.title(f'{model.__class__.__name__} Model')
@@ -36,13 +38,13 @@ def summary(model, save, show):
     plt.grid(True)
     
     timestamp = int(time.time())
-    if save:
+    if settings.save:
         plt.savefig(f'plots/summary_{timestamp}')
-    if show:
+    if settings.show:
         plt.show(block=False)
 
 # Plot the current grid State in the simulation
-def grid(model, save, show):
+def grid(model, settings):
     colors = [Colors[state.name].value for state in model.State]
     cmap = mc.ListedColormap(colors)
     
@@ -60,8 +62,8 @@ def grid(model, save, show):
     plt.grid(True)
     
     timestamp = int(time.time())
-    if save:
+    if settings.save:
         plt.savefig(f'plots/grid_{timestamp}')
-    if show:
+    if settings.show:
         plt.show()
     plt.close('all')
