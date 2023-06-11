@@ -3,8 +3,8 @@ from tabulate import tabulate
 from input import settings, modelSettings
 from sirs import *
 from seirs import *
-from sihrs import *
 from sihrds import *
+from sivrs import *
 import plot
 
 

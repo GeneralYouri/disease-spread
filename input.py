@@ -18,6 +18,8 @@ class Type(Enum):
     SIHRS = 'SIHRS'
     SIHRD = 'SIHRD'
     SIHRDS = 'SIHRDS'
+    SIVR = 'SIVR'
+    SIVRS = 'SIVRS'
 
 
 # Default settings
@@ -30,8 +32,11 @@ beta = 0.7 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
+zeta = 0.005 # Vaccination rate S->V
 interventionFactor = 1.0 # Adjusted infection rate to be applied later during the simulation
 interventionDelay = 100 # The time after which beta2 replaces beta as the infection rate
+vaccinationFactor = 1.0 # Adjusted infection rate for vaccinated cells
+vaccinationDelay = 50 # The time after which the Vaccination State is enabled
 maxBeds = 0.05 # The maximum allowed number of Hospitalized cells
 batches = 0 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
@@ -45,8 +50,10 @@ args = sys.argv[1:]
 options = ''
 longOptions = [
     'type=', 'size=', 'neighborhood=', 'range=',
-    'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=',
-    'interventionFactor=', 'interventionDelay=', 'maxBeds=',
+    'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'zeta=',
+    'interventionFactor=', 'interventionDelay=',
+    'vaccinationFactor=', 'vaccinationDelay=',
+    'maxBeds=',
     'batches=', 'stepsPerBatch=', 'runToEnd', 'save', 'show'
 ]
 
@@ -71,10 +78,16 @@ try:
             delta = float(currentValue)
         elif currentArgument in ('--epsilon'):
             epsilon = float(currentValue)
+        elif currentArgument in ('--zeta'):
+            zeta = float(currentValue)
         elif currentArgument in ('--interventionFactor'):
             interventionFactor = float(currentValue)
         elif currentArgument in ('--interventionDelay'):
-            interventionDelay = float(currentValue)
+            interventionDelay = int(currentValue)
+        elif currentArgument in ('--vaccinationFactor'):
+            vaccinationFactor = float(currentValue)
+        elif currentArgument in ('--vaccinationDelay'):
+            vaccinationDelay = int(currentValue)
         elif currentArgument in ('--maxBeds'):
             maxBeds = float(currentValue)
         elif currentArgument in ('--batches'):
@@ -102,8 +115,9 @@ class Settings:
             setattr(self, k, v)
 modelSettings = Settings(
     size=size, neighborhood=neighborhood, range=range,
-    alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon,
+    alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon, zeta=zeta,
     interventionFactor=interventionFactor, interventionDelay=interventionDelay,
+    vaccinationFactor=vaccinationFactor, vaccinationDelay=vaccinationDelay,
     maxBeds=maxBeds,
 )
 settings = Settings(

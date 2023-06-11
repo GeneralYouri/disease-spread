@@ -60,7 +60,7 @@ class Base:
         self.history = np.append(self.history, self.getCounts())
         self.time += 1
         
-        # Intervention
+        # Apply Intervention
         if self.time == self.interventionDelay:
             self.beta = 1 - (1 - self.beta) ** len(self.neighborhood)
             self.beta *= self.interventionFactor
