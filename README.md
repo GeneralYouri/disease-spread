@@ -106,10 +106,16 @@ Whether to display the result plots on screen
 
 ## TODO List
 
-### Should have
-- Add more and better ways of specifying the initial State.
-- Add more Model types to support features like Superspreader, Vaccination, Intervention.
+### Must Have
+- Add a way to compare exponential growth factors across models.
+Perhaps by calculating the R value?
+- Add more Model types to support features like Superspreader, Vaccination.
 - Figure out a way to use different neighborhoods within a single Model, ie only some cells use an extended neighborhood. This messes up the current calculation because it happens on the receiving cell. See Superspreader.
+
+### Should have
+- Add a way to run a simulation multiple times in a row, then output avg data/plot.
+This helps smoothen out the summary plot and helps prove exponential scaling.
+- Add more and better ways of specifying the initial State.
 - Find a way to apply inheritance to the State Machine itself.
 Goal is to be able to compose State Transitions from different features.
 A feature would be "Recovery" which adds the State Recovered and the Transition I->R.
