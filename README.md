@@ -13,7 +13,7 @@ Using PyInstaller, compile the development version into a new executable:
 ```
 pyinstaller CA.spec
 ```
-Run simulations via the compiled executable:
+Run simulations via the compiled executable (no prerequisites required):
 ```
 CA.exe [settings]
 ```
@@ -22,12 +22,12 @@ CA.exe [settings]
 ## Examples 
 Run the SIRS Model with adjusted alpha/beta/gamma values (this one is very infectious).
 ```
-CA.exe --type=SIRS --alpha=0.1 --beta=0.3 --gamma=0.2 --show
+CA.exe --type=SIRS --alpha=0.1 --beta=0.8 --gamma=0.2 --show
 ```
-Run the SIHRD Model with adjusted gamma/epsilon values and a maximum number of beds.\
+Run the SIHRD Model with adjusted gamma/epsilon values and a maximum fraction of beds.\
 Note it’s usually smart to set epsilon relative to gamma and to specify both settings together.
 ```
-CA.exe --type=SIHRD --alpha=0.05, --beta=0.2, --gamma=0.1 --epsilon=0.04 --maxBeds=210 --show
+CA.exe --type=SIHRD --alpha=0.05, --beta=0.7, --gamma=0.1 --epsilon=0.04 --maxBeds=0.05 --show
 ```
 The same as above, because not specifying a setting uses its default value.\
 Because of this all settings are always optional, even if they are specific to this Model type.\
@@ -42,7 +42,8 @@ CA.exe --type=SEIR --batches=10 --stepsPerBatch=10 --runToEnd --show
 ```
 &nbsp;
 
-You probably want to specify at least these settings whenever you’re generating definitive images.
+You probably want to specify at least these settings whenever you’re generating definitive images.\
+Note: To --save a graph, make a new folder called "Plots" in the same directory as the CA.exe file.
 ```
 CA.exe --type=SIRS --runToEnd --save
 ```
@@ -57,51 +58,78 @@ CA.exe --type=SIRS --batches=10 --stepsPerBatch=10 --save
 All settings are optional and settings can be specified in any order.\
 Note: default values are very likely to change over time.
 
-`--type=SIHRD`\
+`--type=SIR`\
 The model type to simulate.\
-Valid options: SI, SIS, SIR, SIRS, SEI, SEIS, SEIR, SEIRS, SIHR, SIHRD
+Valid options: SI, SIS, SIR, SIRS, SEI, SEIS, SEIR, SEIRS, SIHR, SIHRS, SIHRD, SIHRDS, SIVR, SIVRS.
 
 `--size=100`\
-The one-dimensional size of the square grid; creates a 100x100 cells large grid
+The one-dimensional size of the square grid; creates a 100x100 cells large grid.
+
+`--neighborhood=Neumann`\
+The neighborhood type to use for Infection.
+
+`--range=1`\
+The range applied on the neighborhood type.
 
 `--alpha=0.05`\
-Re-Susceptibility rate for R->S
+Re-Susceptibility rate for R->S.
 
-`--beta=0.2`\
-Infection rate for S->I and S->E\
-Note that the Infection rate applies for every cell neighbor, which is different from the ODE
+`--beta=0.7`\
+Infection rate for S->I and S->E.\
+The Infection rate has been updated to auto-adjust for neighborhood size.\
+You can therefore use the same beta values as used in the ODE.
 
-`--gamma=0.1`\
-Recovery rate for I->R and H->R
+`--gamma=0.25`\
+Recovery rate for I->R and H->R.
 
 `--delta=0.2`\
-Infection rate after Exposure for E->I
+Infection rate after Exposure for E->I.
 
 `--epsilon=0.03`\
-Hospitalization rate for I->H\
-Note it’s usually smart to set this relative to gamma and to specify both settings together
+Hospitalization rate for I->H.\
+Note it’s usually smart to set this relative to gamma and to specify both settings together.
 
-`--maxBeds=500`\
-The maximum allowed number of Hospitalized cells\
-Note it’s usually smart to set this relative to size and adjust whenever you change size
+`--zeta=0.005`\
+Vaccination rate for S->V.
+
+`--interventionFactor=1.0`\
+The factor of change that's applied to beta due to Intervention.\
+Example: is beta=0.8 and interventionFactor=0.75, after Intervention beta=0.6.\
+Note: Intervention is considered to be disabled when this value is 1.0.
+
+`--interventionDelay=100`\
+How long to run the simulation normally before applying Intervention.
+
+`--vaccinationFactor=1.0`\
+The factor of change that's applied to beta when Infecting Vaccinated cells.\
+Example: if beta=0.8 and vaccinationFactor=0.75, for Vaccinated cells beta=0.6.
+
+`--vaccinationDelay=50`\
+How long to run the simulation normally before enabling Vaccination.
+
+`--maxBeds=0.05`\
+The maximum allowed number of Hospitalized cells, as a fraction of the model size.
 
 `--batches=0`\
-How many intermediate results are generated (ie. text output on the screen)\
-Note a value of 0 is treated as infinity, ie. It disables the setting entirely (use for runToEnd)
+How many intermediate results are generated (ie. text output on the screen).\
+Note:the value 0 is treated as infinity, effectively disabling the setting (use for runToEnd).
 
 `--stepsPerBatch=10`\
-How many time steps are simulated per batch\
-The total number of time steps is batches * stepsPerBatch = 5 * 10 = 50
+How many time steps are simulated per batch.\
+The total number of time steps is batches * stepsPerBatch = 5 * 10 = 50.
 
 `--runToEnd`\
-Whether to automatically stop running when the pandemic ends\
-The simulation runs until there are 0 Infectious cells, or until the total number of time steps
+Whether to automatically stop running when the pandemic ends.\
+The simulation runs until there are 0 Infectious cells, or until the total number of time steps.
 
 `--save`\
-Whether to save the result plots as images
+Whether to save the result plots as images.
 
 `--show`\
-Whether to display the result plots on screen
+Whether to display the result plots on screen.
+
+`--logPlot`\
+Whether to use a log10 scale on the y axis for the summary plot.
 #
 
 ## TODO List
