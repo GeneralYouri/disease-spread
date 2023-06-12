@@ -1,8 +1,25 @@
 import random
-from sivr import *
+from enum import IntEnum
+from .sir import *
 
 
-class SIVRS(SIVR):
+class SIVR(SIR):
+    zeta = 0
+    vaccinationFactor = 0
+    vaccinationDelay = 0
+
+    class State(IntEnum):
+        SUSCEPTIBLE = 0
+        INFECTIOUS = 1
+        VACCINATED = 2
+        RECOVERED = 3
+    
+    def __init__(self, settings):
+        super().__init__(settings)
+        beta = 1 - (1 - self.beta) ** len(self.neighborhood)
+        beta2 = beta * self.vaccinationFactor
+        self.beta2 = 1 - (1 - beta2) ** (1 / len(self.neighborhood))
+    
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
@@ -25,7 +42,5 @@ class SIVRS(SIVR):
             if random.random() < self.gamma:
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
-            # Re-susceptibility
-            if random.random() < self.alpha:
-                return self.State.SUSCEPTIBLE
+            pass
         return cell

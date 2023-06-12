@@ -1,16 +1,12 @@
 import time
 from tabulate import tabulate
 from input import settings, modelSettings
-from sirs import *
-from seirs import *
-from sihrds import *
-from sivrs import *
+import models
 import plot
-
 
 # Model creation
 startTimeGlobal = time.perf_counter()
-model = globals()[settings.type](modelSettings)
+model = getattr(models, settings.type)(modelSettings)
 print(f'Init state: {model.history[-1]}')
 
 # Model execution

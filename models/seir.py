@@ -1,9 +1,17 @@
 import random
-from seir import *
-from seis import *
+from enum import IntEnum
+from .sei import *
 
 
-class SEIRS(SEIR, SEIS):
+class SEIR(SEI):
+    gamma = 0
+
+    class State(IntEnum):
+        SUSCEPTIBLE = 0
+        EXPOSED = 1
+        INFECTIOUS = 2
+        RECOVERED = 3
+    
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
@@ -21,7 +29,5 @@ class SEIRS(SEIR, SEIS):
             if random.random() < self.gamma:
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
-            # Re-susceptibility
-            if random.random() < self.alpha:
-                return self.State.SUSCEPTIBLE
+            pass
         return cell

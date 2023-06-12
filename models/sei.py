@@ -1,21 +1,20 @@
 import random
 from enum import IntEnum
-from sei import *
+from .si import *
 
 
-class SEIR(SEI):
-    gamma = 0
-
+class SEI(SI):
+    delta = 0
+    
     class State(IntEnum):
         SUSCEPTIBLE = 0
         EXPOSED = 1
-        INFECTIOUS = 2
-        RECOVERED = 3
+        INFECTIOUS = 0
     
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
-            # Exposure
+            # Expose
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
@@ -25,9 +24,5 @@ class SEIR(SEI):
             if random.random() < self.delta:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
-            # Recover
-            if random.random() < self.gamma:
-                return self.State.RECOVERED
-        elif cell == self.State.RECOVERED:
             pass
         return cell

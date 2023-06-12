@@ -1,23 +1,22 @@
 import random
-from sei import *
+from .sir import *
+from .sis import *
 
 
-class SEIS(SEI):
-    alpha = 0
-    
+class SIRS(SIR, SIS):
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
-            # Exposure
+            # Sicken
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
             if random.random() < compounded:
-                return self.State.EXPOSED
-        elif cell == self.State.EXPOSED:
-            # Sicken
-            if random.random() < self.delta:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
+            # Recover
+            if random.random() < self.gamma:
+                return self.State.RECOVERED
+        elif cell == self.State.RECOVERED:
             # Re-susceptibility
             if random.random() < self.alpha:
                 return self.State.SUSCEPTIBLE

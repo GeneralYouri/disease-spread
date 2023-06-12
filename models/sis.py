@@ -1,5 +1,5 @@
 import random
-from si import *
+from .si import *
 
 
 class SIS(SI):
