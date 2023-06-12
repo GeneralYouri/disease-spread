@@ -64,7 +64,7 @@ try:
         if currentArgument in ('--type'):
             type = Type(currentValue).value
         elif currentArgument in ('--size'):
-            size = float(currentValue)
+            size = int(currentValue)
         elif currentArgument in ('--neighborhood'):
             neighborhood = Strategy(currentValue).value
         elif currentArgument in ('--range'):

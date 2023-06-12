@@ -110,6 +110,8 @@ How long to run the simulation normally before enabling Vaccination.
 `--maxBeds=0.05`\
 The maximum allowed number of Hospitalized cells, as a fraction of the model size.
 
+&nbsp;
+
 `--batches=10`\
 How many intermediate results are generated (ie. text output on the screen).\
 Note:the value 0 is treated as infinity, effectively disabling the setting (use for runToEnd).
