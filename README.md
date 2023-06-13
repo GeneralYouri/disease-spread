@@ -24,21 +24,21 @@ Run the SIRS Model with adjusted alpha/beta/gamma values (this one is very infec
 ```
 CA.exe --type=SIRS --alpha=0.1 --beta=0.8 --gamma=0.2 --show
 ```
-Run the SIHRD Model with adjusted gamma/epsilon values and a maximum fraction of beds.\
+Run the SIR_HD Model with adjusted gamma/epsilon values and a maximum fraction of beds.\
 Note it’s usually smart to set epsilon relative to gamma and to specify both settings together.
 ```
-CA.exe --type=SIHRD --alpha=0.05, --beta=0.7, --gamma=0.1 --epsilon=0.04 --maxBeds=0.05 --show
+CA.exe --type=SIR_HD --alpha=0.05, --beta=0.7, --gamma=0.1 --epsilon=0.04 --maxBeds=0.05 --show
 ```
 The same as above, because not specifying a setting uses its default value.\
 Because of this all settings are always optional, even if they are specific to this Model type.\
 It is also fine if you happen to specify settings that are not used by the specified Model type.
 ```
-CA.exe --type=SIHRD --gamma=0.2 --epsilon=0.06 --delta=0.5 --show
+CA.exe --type=SIR_HD --gamma=0.2 --epsilon=0.06 --delta=0.5 --show
 ```
-Run the SEIR Model for up to 100 time steps and show the result on screen.\
+Run the S_EIR Model for up to 100 time steps and show the result on screen.\
 The simulation can stop early if the pandemic dies before 100 time steps.
 ```
-CA.exe --type=SEIR --batches=10 --stepsPerBatch=10 --runToEnd --show
+CA.exe --type=SIR_E --batches=10 --stepsPerBatch=10 --runToEnd --show
 ```
 &nbsp;
 
@@ -60,7 +60,7 @@ Note: default values are very likely to change over time.
 
 `--type=SIR`\
 The model type to simulate.\
-Valid options: SI, SIS, SIR, SIRS, SEI, SEIS, SEIR, SEIRS, SIHR, SIHRS, SIHRD, SIHRDS, SIVR, SIVRS.
+Valid options: SI, SIS, SIR, SIRS, SI_E, SIS_E, SIR_E, SIRS_E, SIR_H, SIRS_H, SIR_HD, SIRS_HD, SIR_V1, SIRS_V1, SIR_V2, SIRS_V2.
 
 `--size=100`\
 The one-dimensional size of the square grid; creates a 100x100 cells large grid.
@@ -121,7 +121,8 @@ The maximum allowed fraction of Hospitalized cells.
 
 `--simulations=1`\
 How many times to run the entire simulation in a row.\
-For values above 1 only the summary plot is used, using average data across all simulations.
+For values above 1 only the summary plot is used, using average data across all simulations.\
+The runtime of the shortest simulation is used; other data is discarded.
 
 `--batches=10`\
 How many intermediate results are generated (ie. text output on the screen).\
