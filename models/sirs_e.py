@@ -1,10 +1,9 @@
 import random
-from .sei import *
+from .sir_e import *
+from .sis_e import *
 
 
-class SEIS(SEI):
-    alpha = 0
-    
+class SIRS_E(SIR_E, SIS_E):
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
@@ -18,6 +17,10 @@ class SEIS(SEI):
             if random.random() < self.delta:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
+            # Recover
+            if random.random() < self.gamma:
+                return self.State.RECOVERED
+        elif cell == self.State.RECOVERED:
             # Re-susceptibility
             if random.random() < self.alpha:
                 return self.State.SUSCEPTIBLE

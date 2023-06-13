@@ -1,19 +1,8 @@
 import random
-from .sihr import *
+from .sir_h import *
 
 
-class SIHRD(SIHR):
-    epsilon = 0
-    beds = 0
-    maxBeds = 0
-
-    class State(IntEnum):
-        SUSCEPTIBLE = 0
-        INFECTIOUS = 1
-        HOSPITALIZED = 2
-        RECOVERED = 3
-        DEAD = 4
-    
+class SIRS_H(SIR_H):
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:
@@ -25,21 +14,16 @@ class SIHRD(SIHR):
         elif cell == self.State.INFECTIOUS:
             # Hospitalize
             if random.random() < self.epsilon:
-                if self.beds < self.maxBeds:
-                    self.beds += 1
-                    return self.State.HOSPITALIZED
-                else:
-                    return self.State.DEAD
+                return self.State.HOSPITALIZED
             # Recover
-            elif random.random() < self.gamma:
+            if random.random() < self.gamma:
                 return self.State.RECOVERED
         elif cell == self.State.HOSPITALIZED:
             # Recover
-            if random.random() < self.epsilon:
-                self.beds -= 1
+            if random.random() < self.gamma / 2:
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
-            pass
-        elif cell == self.State.DEAD:
-            pass
+            # Re-susceptibility
+            if random.random() < self.alpha:
+                return self.State.SUSCEPTIBLE
         return cell
