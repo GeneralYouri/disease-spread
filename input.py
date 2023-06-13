@@ -20,6 +20,8 @@ class Type(Enum):
     SIHRDS = 'SIHRDS'
     SIR_V1 = 'SIR_V1'
     SIRS_V1 = 'SIRS_V1'
+    SIR_V2 = 'SIR_V2'
+    SIRS_V2 = 'SIRS_V2'
 
 
 # Default settings
@@ -30,7 +32,7 @@ range = 1 # The range applied to the neighborhood
 initial = 0 # The initial fraction of cells to Infect
 alpha = 0.05 # Re-Susceptibility rate R->S
 beta = 0.7 # Infection rate S->I | S->E
-gamma = 0.25 # Recovery rate I->R | H->R
+gamma = 0.1 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
 zeta = 0.005 # Vaccination rate S->V
@@ -38,7 +40,8 @@ interventionFactor = 1.0 # Adjusted infection rate to be applied later during th
 interventionDelay = 100 # The time after which beta2 replaces beta as the infection rate
 vaccinationFactor = 1.0 # Adjusted infection rate for vaccinated cells
 vaccinationDelay = 50 # The time after which the Vaccination State is enabled
-maxBeds = 0.05 # The maximum allowed number of Hospitalized cells
+maxVaccines = 1.0 # The maximum allowed fraction of Vaccinated cells
+maxBeds = 0.05 # The maximum allowed fraction of Hospitalized cells
 batches = 10 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends
@@ -55,8 +58,10 @@ longOptions = [
     'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'zeta=',
     'interventionFactor=', 'interventionDelay=',
     'vaccinationFactor=', 'vaccinationDelay=',
-    'maxBeds=',
-    'batches=', 'stepsPerBatch=', 'runToEnd', 'save', 'show', 'logPlot',
+    'maxVaccines=', 'maxBeds=',
+    
+    'batches=', 'stepsPerBatch=', 'runToEnd',
+    'save', 'show', 'logPlot',
 ]
 
 try:
@@ -92,6 +97,8 @@ try:
             vaccinationFactor = float(currentValue)
         elif currentArgument in ('--vaccinationDelay'):
             vaccinationDelay = int(currentValue)
+        elif currentArgument in ('--maxVaccines'):
+            maxVaccines = float(currentValue)
         elif currentArgument in ('--maxBeds'):
             maxBeds = float(currentValue)
         elif currentArgument in ('--batches'):
@@ -124,7 +131,7 @@ modelSettings = Settings(
     alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon, zeta=zeta,
     interventionFactor=interventionFactor, interventionDelay=interventionDelay,
     vaccinationFactor=vaccinationFactor, vaccinationDelay=vaccinationDelay,
-    maxBeds=maxBeds,
+    maxVaccines=maxVaccines, maxBeds=maxBeds,
 )
 settings = Settings(
     type=type,

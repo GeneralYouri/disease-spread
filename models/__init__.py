@@ -12,3 +12,5 @@ from .sihrd import SIHRD
 from .sihrds import SIHRDS
 from .sir_v1 import SIR_V1
 from .sirs_v1 import SIRS_V1
+from .sir_v2 import SIR_V2
+from .sirs_v2 import SIRS_V2

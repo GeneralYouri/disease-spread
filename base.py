@@ -29,6 +29,8 @@ class Base:
         self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
         # Apply the maxBeds fraction to the model size and get a flat amount
         self.maxBeds = self.maxBeds * self.size ** 2
+        # Apply the maxVaccines fraction to the model size and get a flat amount
+        self.maxVaccines = self.maxVaccines * self.size ** 2
         
         self.initialize()
         self.history = np.append(self.history, self.getCounts())
