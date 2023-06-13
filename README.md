@@ -71,6 +71,10 @@ The neighborhood type to use for Infection.
 `--range=1`\
 The range applied on the neighborhood type.
 
+`--initial=0`\
+The initial fraction of cells to randomly Infect.\
+Note: the value 0 instead Infects the center 3x3 of cells.
+
 `--alpha=0.05`\
 Re-Susceptibility rate for R->S.
 
@@ -94,7 +98,7 @@ Vaccination rate for S->V.
 
 `--interventionFactor=1.0`\
 The factor of change that's applied to beta due to Intervention.\
-Example: is beta=0.8 and interventionFactor=0.75, after Intervention beta=0.6.\
+Example: if beta=0.8 and interventionFactor=0.75, after Intervention beta=0.6.\
 Note: Intervention is considered to be disabled when this value is 1.0.
 
 `--interventionDelay=100`\
@@ -107,14 +111,21 @@ Example: if beta=0.8 and vaccinationFactor=0.75, for Vaccinated cells beta=0.6.
 `--vaccinationDelay=50`\
 How long to run the simulation normally before enabling Vaccination.
 
+`--maxVaccines=1.0`\
+The maximum allowed fraction of Vaccinated cells.
+
 `--maxBeds=0.05`\
-The maximum allowed number of Hospitalized cells, as a fraction of the model size.
+The maximum allowed fraction of Hospitalized cells.
 
 &nbsp;
 
+`--simulations=1`\
+How many times to run the entire simulation in a row.\
+For values above 1 only the summary plot is used, using average data across all simulations.
+
 `--batches=10`\
 How many intermediate results are generated (ie. text output on the screen).\
-Note:the value 0 is treated as infinity, effectively disabling the setting (use for runToEnd).
+Note: the value 0 is treated as infinity, effectively disabling the setting (use for runToEnd).
 
 `--stepsPerBatch=10`\
 How many time steps are simulated per batch.\
@@ -125,7 +136,8 @@ Whether to automatically stop running when the pandemic ends.\
 The simulation runs until there are 0 Infectious cells, or until the total number of time steps.
 
 `--save`\
-Whether to save the result plots as images.
+Whether to save the result plots as images.\
+Note: To --save a graph, make a new folder called "Plots" in the same directory as the CA.exe file.
 
 `--show`\
 Whether to display the result plots on screen.
@@ -137,15 +149,14 @@ Whether to use a log10 scale on the y axis for the summary plot.
 ## TODO List
 
 ### Must Have
-- Add a way to compare exponential growth factors across models.
+- Add a way to compare and prove exponential growth factors across models.
 Perhaps by calculating the R value?
-- Add more Model types to support features like Superspreader, Vaccination.
+- Add more Model types to support these features:
+  - Superspreader: A variant Infected cell with a larger neighborhood.
+  - Supershedder: A variant Infected cell with a higher Infection rate beta.
 - Figure out a way to use different neighborhoods within a single Model, ie only some cells use an extended neighborhood. This messes up the current calculation because it happens on the receiving cell. See Superspreader.
 
 ### Should have
-- Add a way to run a simulation multiple times in a row, then output avg data/plot.
-This helps smoothen out the summary plot and helps prove exponential scaling.
-- Add more and better ways of specifying the initial State.
 - Find a way to apply inheritance to the State Machine itself.
 Goal is to be able to compose State Transitions from different features.
 A feature would be "Recovery" which adds the State Recovered and the Transition I->R.
