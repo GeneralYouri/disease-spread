@@ -1,3 +1,7 @@
+# Persist the folder used to store plot images
+plots/*
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
