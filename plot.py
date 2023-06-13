@@ -15,13 +15,43 @@ class Colors(Enum):
     EXPOSED = 'orange'
     DEAD = 'black'
 
+# Plot average summary/history data across multiple simulations
+def averageSummary(models, settings, marker):
+    states = [s.name for s in models[0].State]
+    lengths = [len(model.history) for model in models]
+    times = range(0, min(lengths))
+    counts = {s: [sum([m.history[t][s] for m in models]) / len(models) for t in times] for s in states}
+    
+    for s in states:
+        plt.plot(times, counts[s], label=s, color=Colors[s].value)
+    
+    # Show Intervention timing
+    if models[0].interventionFactor != 1.0 and len(times) > models[0].interventionDelay:
+        plt.axvline(models[0].interventionDelay, linestyle='--', label='INTERVENTION')
+    
+    if settings.logPlot:
+        plt.yscale('log', base=10)
+    
+    plt.xlabel('Time')
+    plt.ylabel('Amount')
+    plt.title(f'{models[0].__class__.__name__} Model')
+    plt.legend()
+    plt.grid(True)
+    
+    if settings.save:
+        plt.savefig(f'plots/averageSummary_{marker}')
+    if settings.show:
+        plt.show()
+
 # Plot summary/history data of the simulation so far
 def summary(model, settings, marker):
-    times = range(0, len(model.history))
-    counts = {state: [t[state] for t in model.history] for state in model.history[0]}
+    states = [s.name for s in model.State]
+    length = len(model.history)
+    times = range(0, length)
+    counts = {s: [model.history[t][s] for t in times] for s in states}
     
-    for state in model.history[0]:
-        plt.plot(times, counts[state], label=state, color=Colors[state].value)
+    for s in states:
+        plt.plot(times, counts[s], label=s, color=Colors[s].value)
     
     # Show Intervention timing
     if model.interventionFactor != 1.0 and len(times) > model.interventionDelay:
@@ -43,7 +73,7 @@ def summary(model, settings, marker):
 
 # Plot the current grid State in the simulation
 def grid(model, settings, marker):
-    colors = [Colors[state.name].value for state in model.State]
+    colors = [Colors[s.name].value for s in model.State]
     cmap = mc.ListedColormap(colors)
     
     # Customize colorbar to include State names

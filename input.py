@@ -42,6 +42,7 @@ vaccinationFactor = 1.0 # Adjusted infection rate for vaccinated cells
 vaccinationDelay = 50 # The time after which the Vaccination State is enabled
 maxVaccines = 1.0 # The maximum allowed fraction of Vaccinated cells
 maxBeds = 0.05 # The maximum allowed fraction of Hospitalized cells
+simulations = 1 # How many times to run the entire simulation in a row (results are averaged)
 batches = 10 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends
@@ -60,7 +61,7 @@ longOptions = [
     'vaccinationFactor=', 'vaccinationDelay=',
     'maxVaccines=', 'maxBeds=',
     
-    'batches=', 'stepsPerBatch=', 'runToEnd',
+    'simulations=', 'batches=', 'stepsPerBatch=', 'runToEnd',
     'save', 'show', 'logPlot',
 ]
 
@@ -101,6 +102,8 @@ try:
             maxVaccines = float(currentValue)
         elif currentArgument in ('--maxBeds'):
             maxBeds = float(currentValue)
+        elif currentArgument in ('--simulations'):
+            simulations = int(currentValue)
         elif currentArgument in ('--batches'):
             batches = int(currentValue)
         elif currentArgument in ('--stepsPerBatch'):
@@ -135,6 +138,6 @@ modelSettings = Settings(
 )
 settings = Settings(
     type=type,
-    batches=batches, stepsPerBatch=stepsPerBatch, runToEnd=runToEnd,
+    simulations=simulations, batches=batches, stepsPerBatch=stepsPerBatch, runToEnd=runToEnd,
     save=save, show=show, logPlot=logPlot,
 )
