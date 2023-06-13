@@ -25,8 +25,8 @@ for i in range(0, settings.batches):
 
 # Model output
 endTimeGlobal = time.perf_counter()
-print(f'{model.__class__.__name__} Model Settings used:')
-print(tabulate(modelSettings.__dict__.items()))
 print(f'Simulation finished after {model.time} steps and {endTimeGlobal - startTimeGlobal:.2f} seconds')
+print(f'\n{model.__class__.__name__} Model Settings used:')
+print(tabulate(modelSettings.__dict__.items()))
 plot.summary(model, settings)
 plot.grid(model, settings)
