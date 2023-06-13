@@ -1,6 +1,5 @@
 import matplotlib.colors as mc
 import matplotlib.pyplot as plt
-import time
 from enum import Enum
 
 
@@ -17,7 +16,7 @@ class Colors(Enum):
     DEAD = 'black'
 
 # Plot summary/history data of the simulation so far
-def summary(model, settings):
+def summary(model, settings, marker):
     times = range(0, len(model.history))
     counts = {state: [t[state] for t in model.history] for state in model.history[0]}
     
@@ -37,14 +36,13 @@ def summary(model, settings):
     plt.legend()
     plt.grid(True)
     
-    timestamp = int(time.time())
     if settings.save:
-        plt.savefig(f'plots/summary_{timestamp}')
+        plt.savefig(f'plots/summary_{marker}')
     if settings.show:
         plt.show(block=False)
 
 # Plot the current grid State in the simulation
-def grid(model, settings):
+def grid(model, settings, marker):
     colors = [Colors[state.name].value for state in model.State]
     cmap = mc.ListedColormap(colors)
     
@@ -61,9 +59,8 @@ def grid(model, settings):
     plt.title(f'{model.__class__.__name__} Model')
     plt.grid(True)
     
-    timestamp = int(time.time())
     if settings.save:
-        plt.savefig(f'plots/grid_{timestamp}')
+        plt.savefig(f'plots/grid_{marker}')
     if settings.show:
         plt.show()
     plt.close('all')
