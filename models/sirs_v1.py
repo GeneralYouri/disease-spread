@@ -1,8 +1,8 @@
 import random
-from .sivr import *
+from .sir_v1 import *
 
 
-class SIVRS(SIVR):
+class SIRS_V1(SIR_V1):
     def updateCell(self, x, y):
         cell = self.grid[x, y]
         if cell == self.State.SUSCEPTIBLE:

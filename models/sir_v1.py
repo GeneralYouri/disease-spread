@@ -3,7 +3,7 @@ from enum import IntEnum
 from .sir import *
 
 
-class SIVR(SIR):
+class SIR_V1(SIR):
     zeta = 0
     vaccinationFactor = 0
     vaccinationDelay = 0

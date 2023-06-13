@@ -18,8 +18,8 @@ class Type(Enum):
     SIHRS = 'SIHRS'
     SIHRD = 'SIHRD'
     SIHRDS = 'SIHRDS'
-    SIVR = 'SIVR'
-    SIVRS = 'SIVRS'
+    SIR_V1 = 'SIR_V1'
+    SIRS_V1 = 'SIRS_V1'
 
 
 # Default settings

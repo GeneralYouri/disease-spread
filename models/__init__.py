@@ -10,5 +10,5 @@ from .sihr import SIHR
 from .sihrs import SIHRS
 from .sihrd import SIHRD
 from .sihrds import SIHRDS
-from .sivr import SIVR
-from .sivrs import SIVRS
+from .sir_v1 import SIR_V1
+from .sirs_v1 import SIRS_V1
