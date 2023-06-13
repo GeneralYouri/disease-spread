@@ -27,6 +27,7 @@ type = Type.SIR.value # The model type to simulate
 size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
+initial = 0 # The initial fraction of cells to Infect
 alpha = 0.05 # Re-Susceptibility rate R->S
 beta = 0.7 # Infection rate S->I | S->E
 gamma = 0.25 # Recovery rate I->R | H->R
@@ -50,7 +51,7 @@ logPlot = False # Whether to use a log scale for the summary plot
 args = sys.argv[1:]
 options = ''
 longOptions = [
-    'type=', 'size=', 'neighborhood=', 'range=',
+    'type=', 'size=', 'neighborhood=', 'range=', 'initial=',
     'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'zeta=',
     'interventionFactor=', 'interventionDelay=',
     'vaccinationFactor=', 'vaccinationDelay=',
@@ -69,6 +70,8 @@ try:
             neighborhood = Strategy(currentValue).value
         elif currentArgument in ('--range'):
             range = int(currentValue)
+        elif currentArgument in ('--initial'):
+            initial = float(currentValue)
         elif currentArgument in ('--alpha'):
             gamma = float(currentValue)
         elif currentArgument in ('--beta'):
@@ -117,7 +120,7 @@ class Settings:
         for k, v in kwargs.items():
             setattr(self, k, v)
 modelSettings = Settings(
-    size=size, neighborhood=neighborhood, range=range,
+    size=size, neighborhood=neighborhood, range=range, initial=initial,
     alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon, zeta=zeta,
     interventionFactor=interventionFactor, interventionDelay=interventionDelay,
     vaccinationFactor=vaccinationFactor, vaccinationDelay=vaccinationDelay,
