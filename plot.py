@@ -16,7 +16,7 @@ class Colors(Enum):
     DEAD = 'black'
 
 # Plot average summary/history data across multiple simulations
-def averageSummary(models, settings, marker):
+def averageSummary(models, settings, marker, logPlot=False):
     states = [s.name for s in models[0].State]
     lengths = [len(model.history) for model in models]
     times = range(0, min(lengths))
@@ -29,8 +29,9 @@ def averageSummary(models, settings, marker):
     if models[0].interventionFactor != 1.0 and len(times) > models[0].interventionDelay:
         plt.axvline(models[0].interventionDelay, linestyle='--', label='INTERVENTION')
     
-    if settings.logPlot:
+    if logPlot:
         plt.yscale('log', base=10)
+        marker = f'log_{marker}'
     
     plt.xlabel('Time')
     plt.ylabel('Amount')
@@ -42,9 +43,10 @@ def averageSummary(models, settings, marker):
         plt.savefig(f'plots/averageSummary_{marker}')
     if settings.show:
         plt.show()
+    plt.close('all')
 
 # Plot summary/history data of the simulation so far
-def summary(model, settings, marker):
+def summary(model, settings, marker, logPlot=False):
     states = [s.name for s in model.State]
     length = len(model.history)
     times = range(0, length)
@@ -57,8 +59,9 @@ def summary(model, settings, marker):
     if model.interventionFactor != 1.0 and len(times) > model.interventionDelay:
         plt.axvline(model.interventionDelay, linestyle='--', label='INTERVENTION')
     
-    if settings.logPlot:
+    if logPlot:
         plt.yscale('log', base=10)
+        marker = f'log_{marker}'
     
     plt.xlabel('Time')
     plt.ylabel('Amount')
@@ -70,6 +73,7 @@ def summary(model, settings, marker):
         plt.savefig(f'plots/summary_{marker}')
     if settings.show:
         plt.show(block=False)
+    plt.close('all')
 
 # Plot the current grid State in the simulation
 def grid(model, settings, marker):

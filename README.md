@@ -142,9 +142,6 @@ Note: To --save a graph, make a new folder called "Plots" in the same directory 
 
 `--show`\
 Whether to display the result plots on screen.
-
-`--logPlot`\
-Whether to use a log10 scale on the y axis for the summary plot.
 #
 
 ## TODO List

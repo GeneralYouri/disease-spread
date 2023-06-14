@@ -34,7 +34,8 @@ def simulate():
 if settings.simulations == 1:
     model = simulate()
     marker = int(time.time()) % (10 ** 6)
-    plot.summary(model, settings, marker)
+    plot.summary(model, settings, marker, False)
+    plot.summary(model, settings, marker, True)
     plot.grid(model, settings, marker)
     
 else:
@@ -43,4 +44,5 @@ else:
         model = simulate()
         usedModels.append(model)
     marker = int(time.time()) % (10 ** 6)
-    plot.averageSummary(usedModels, settings, marker)
+    plot.averageSummary(usedModels, settings, marker, False)
+    plot.averageSummary(usedModels, settings, marker, True)
