@@ -17,6 +17,7 @@ Run simulations via the compiled executable (no prerequisites required):
 ```
 CA.exe [settings]
 ```
+**Note: Output plot images are saved in a subfolder called `plots`. This subfolder must be manually created.**
 #
 
 ## Examples 
