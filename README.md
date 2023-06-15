@@ -69,9 +69,6 @@ The one-dimensional size of the square grid; creates a 100x100 cells large grid.
 `--neighborhood=Neumann`\
 The neighborhood type to use for Infection.
 
-`--range=1`\
-The range applied on the neighborhood type.
-
 `--initial=0`\
 The initial fraction of cells to randomly Infect.\
 Note: the value 0 instead Infects the center 3x3 of cells.
@@ -97,10 +94,6 @@ Note it’s usually smart to set this relative to gamma and to specify both sett
 `--zeta=0.005`\
 Vaccination rate for S->V.
 
-`--superspreaders=0.1`\
-The fraction of cells that act as Super Spreaders when Infected.\
-Super Spreaders use a larger neighborhood so they can Infect more over longer distances.
-
 `--interventionFactor=1.0`\
 The factor of change that's applied to beta due to Intervention.\
 Example: if beta=0.8 and interventionFactor=0.75, after Intervention beta=0.6.\
@@ -121,6 +114,14 @@ The maximum allowed fraction of Vaccinated cells.
 
 `--maxBeds=0.05`\
 The maximum allowed fraction of Hospitalized cells.
+
+`--superspreaders=0.1`\
+The fraction of cells that act as Super Spreaders when Infected.\
+Their neighborhood size is 3x as large so they can Infect more over longer distances.
+
+`--supershedders=0.1`\
+The fraction of cells that act as Super Shedders when Infected.\
+They Infect their neighborhood 3x per time step to simulate higher Infection rates.
 
 &nbsp;
 
@@ -154,10 +155,6 @@ Whether to display the result plots on screen.
 ### Must Have
 - Add a way to compare and prove exponential growth factors across models.
 Perhaps by calculating the R value? `matplotlib.pyplot.twiny`
-- Add more Model types to support these features:
-  - Superspreader: A variant Infected cell with a larger neighborhood.
-  - Supershedder: A variant Infected cell with a higher Infection rate beta.
-- Figure out a way to use different neighborhoods within a single Model, ie only some cells use an extended neighborhood. This messes up the current calculation because it happens on the receiving cell. See Superspreader.
 
 ### Should have
 - Find a way to apply inheritance to the State Machine itself.
