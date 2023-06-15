@@ -24,10 +24,12 @@ class Type(Enum):
     SIRS_V2 = 'SIRS_V2'
     SIR_SSP = 'SIR_SSP'
     SIRS_SSP = 'SIRS_SSP'
+    SIR_SSH = 'SIR_SSH'
+    SIRS_SSH = 'SIRS_SSH'
 
 
 # Default settings
-type = Type.SIR_SSP.value # The model type to simulate
+type = Type.SIR.value # The model type to simulate
 size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
@@ -38,13 +40,15 @@ gamma = 0.1 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
 zeta = 0.005 # Vaccination rate S->V
-superspreaders = 0.1 # The fraction of cells that act as Super Spreaders when Infected
 interventionFactor = 1.0 # Adjusted infection rate to be applied later during the simulation
 interventionDelay = 100 # The time after which beta2 replaces beta as the infection rate
 vaccinationFactor = 1.0 # Adjusted infection rate for vaccinated cells
 vaccinationDelay = 50 # The time after which the Vaccination State is enabled
 maxVaccines = 1.0 # The maximum allowed fraction of Vaccinated cells
 maxBeds = 0.05 # The maximum allowed fraction of Hospitalized cells
+superspreaders = 0.1 # The fraction of cells that act as Super Spreaders when Infected
+supershedders = 0.1 # The fraction of cells that act as Super Shedders when Infected
+
 simulations = 1 # How many times to run the entire simulation in a row (results are averaged)
 batches = 10 # How many intermediate results are generated
 stepsPerBatch = 10 # How many steps are simulated per batch
@@ -59,10 +63,8 @@ options = ''
 longOptions = [
     'type=', 'size=', 'neighborhood=', 'range=', 'initial=',
     'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'zeta=',
-    'superspreaders=',
-    'interventionFactor=', 'interventionDelay=',
-    'vaccinationFactor=', 'vaccinationDelay=',
-    'maxVaccines=', 'maxBeds=',
+    'interventionFactor=', 'interventionDelay=', 'vaccinationFactor=', 'vaccinationDelay=',
+    'maxVaccines=', 'maxBeds=', 'superspreaders=', 'supershedders=',
     
     'simulations=', 'batches=', 'stepsPerBatch=', 'runToEnd',
     'save', 'show',
@@ -93,8 +95,6 @@ try:
             epsilon = float(currentValue)
         elif currentArgument in ('--zeta'):
             zeta = float(currentValue)
-        elif currentArgument in ('--superspreaders'):
-            superspreaders = int(currentValue)
         elif currentArgument in ('--interventionFactor'):
             interventionFactor = float(currentValue)
         elif currentArgument in ('--interventionDelay'):
@@ -107,6 +107,11 @@ try:
             maxVaccines = float(currentValue)
         elif currentArgument in ('--maxBeds'):
             maxBeds = float(currentValue)
+        elif currentArgument in ('--superspreaders'):
+            superspreaders = int(currentValue)
+        elif currentArgument in ('--supershedders'):
+            supershedders = int(currentValue)
+
         elif currentArgument in ('--simulations'):
             simulations = int(currentValue)
         elif currentArgument in ('--batches'):
@@ -135,10 +140,10 @@ class Settings:
 modelSettings = Settings(
     size=size, neighborhood=neighborhood, range=range, initial=initial,
     alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon, zeta=zeta,
-    superspreaders=superspreaders,
     interventionFactor=interventionFactor, interventionDelay=interventionDelay,
     vaccinationFactor=vaccinationFactor, vaccinationDelay=vaccinationDelay,
     maxVaccines=maxVaccines, maxBeds=maxBeds,
+    superspreaders=superspreaders, supershedders=supershedders,
 )
 settings = Settings(
     type=type,

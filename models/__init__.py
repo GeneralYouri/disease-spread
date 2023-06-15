@@ -16,3 +16,5 @@ from .sir_v2 import SIR_V2
 from .sirs_v2 import SIRS_V2
 from .sir_ssp import SIR_SSP
 from .sirs_ssp import SIRS_SSP
+from .sir_ssh import SIR_SSH
+from .sirs_ssh import SIRS_SSH
