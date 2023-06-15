@@ -14,8 +14,7 @@ class SIR_SSP(SIR):
         
         # Compute Super Spreader neighborhood
         self.neighborhood2 = self.neighborhood
-        self.range2 = self.range + 1
-        self.neighborDeltas2 = getattr(neighborhood, self.neighborhood2)(self.range2)
+        self.neighborDeltas2 = getattr(neighborhood, self.neighborhood2)(2)
         
         # Generate Super Spreaders
         self.isSSP = np.full(self.grid.shape, False, dtype=bool)

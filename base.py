@@ -25,7 +25,7 @@ class Base:
         ## Post-processing
         self.center = round(self.size / 2)
         # Compute neighborhood
-        self.neighborDeltas = getattr(neighborhood, self.neighborhood)(self.range)
+        self.neighborDeltas = getattr(neighborhood, self.neighborhood)(1)
         # Adjust beta to account for neighborhood
         self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborDeltas))
         # Apply the maxBeds fraction to the model size and get a flat amount

@@ -32,7 +32,6 @@ class Type(Enum):
 type = Type.SIR.value # The model type to simulate
 size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
-range = 1 # The range applied to the neighborhood
 initial = 0 # The initial fraction of cells to Infect
 alpha = 0.05 # Re-Susceptibility rate R->S
 beta = 0.7 # Infection rate S->I | S->E
@@ -61,7 +60,7 @@ show = False # Whether to display the result plots on screen
 args = sys.argv[1:]
 options = ''
 longOptions = [
-    'type=', 'size=', 'neighborhood=', 'range=', 'initial=',
+    'type=', 'size=', 'neighborhood=', 'initial=',
     'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'zeta=',
     'interventionFactor=', 'interventionDelay=', 'vaccinationFactor=', 'vaccinationDelay=',
     'maxVaccines=', 'maxBeds=', 'superspreaders=', 'supershedders=',
@@ -79,8 +78,6 @@ try:
             size = int(currentValue)
         elif currentArgument in ('--neighborhood'):
             neighborhood = Strategy(currentValue).value
-        elif currentArgument in ('--range'):
-            range = int(currentValue)
         elif currentArgument in ('--initial'):
             initial = float(currentValue)
         elif currentArgument in ('--alpha'):
@@ -138,7 +135,7 @@ class Settings:
         for k, v in kwargs.items():
             setattr(self, k, v)
 modelSettings = Settings(
-    size=size, neighborhood=neighborhood, range=range, initial=initial,
+    size=size, neighborhood=neighborhood, initial=initial,
     alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon, zeta=zeta,
     interventionFactor=interventionFactor, interventionDelay=interventionDelay,
     vaccinationFactor=vaccinationFactor, vaccinationDelay=vaccinationDelay,
