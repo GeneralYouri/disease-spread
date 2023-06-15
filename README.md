@@ -97,6 +97,10 @@ Note it’s usually smart to set this relative to gamma and to specify both sett
 `--zeta=0.005`\
 Vaccination rate for S->V.
 
+`--superspreaders=0.1`\
+The fraction of cells that act as Super Spreaders when Infected.\
+Super Spreaders use a larger neighborhood so they can Infect more over longer distances.
+
 `--interventionFactor=1.0`\
 The factor of change that's applied to beta due to Intervention.\
 Example: if beta=0.8 and interventionFactor=0.75, after Intervention beta=0.6.\
@@ -149,7 +153,7 @@ Whether to display the result plots on screen.
 
 ### Must Have
 - Add a way to compare and prove exponential growth factors across models.
-Perhaps by calculating the R value?
+Perhaps by calculating the R value? `matplotlib.pyplot.twiny`
 - Add more Model types to support these features:
   - Superspreader: A variant Infected cell with a larger neighborhood.
   - Supershedder: A variant Infected cell with a higher Infection rate beta.
