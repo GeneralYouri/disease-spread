@@ -72,7 +72,7 @@ def summary(model, settings, marker, logPlot=False):
     if settings.save:
         plt.savefig(f'plots/summary_{marker}')
     if settings.show:
-        plt.show(block=False)
+        plt.show()
     plt.close('all')
 
 # Plot the current grid State in the simulation
