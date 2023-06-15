@@ -16,9 +16,9 @@ class SIR_V1(SIR):
     
     def __init__(self, settings):
         super().__init__(settings)
-        beta = 1 - (1 - self.beta) ** len(self.neighborhood)
+        beta = 1 - (1 - self.beta) ** len(self.neighborDeltas)
         beta2 = beta * self.vaccinationFactor
-        self.beta2 = 1 - (1 - beta2) ** (1 / len(self.neighborhood))
+        self.beta2 = 1 - (1 - beta2) ** (1 / len(self.neighborDeltas))
     
     def updateCell(self, x, y):
         cell = self.grid[x, y]

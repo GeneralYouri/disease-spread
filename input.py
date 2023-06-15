@@ -22,10 +22,12 @@ class Type(Enum):
     SIRS_V1 = 'SIRS_V1'
     SIR_V2 = 'SIR_V2'
     SIRS_V2 = 'SIRS_V2'
+    SIR_SSP = 'SIR_SSP'
+    SIRS_SSP = 'SIRS_SSP'
 
 
 # Default settings
-type = Type.SIR.value # The model type to simulate
+type = Type.SIR_SSP.value # The model type to simulate
 size = 100 # The size of the square grid
 neighborhood = Strategy.NEUMANN.value # The name of the neighborhood type
 range = 1 # The range applied to the neighborhood
@@ -36,6 +38,7 @@ gamma = 0.1 # Recovery rate I->R | H->R
 delta = 0.2 # Infection rate after Exposure E->I
 epsilon = 0.3 * gamma # Hospitalization rate I->H
 zeta = 0.005 # Vaccination rate S->V
+superspreaders = 0.1 # The fraction of cells that act as Super Spreaders when Infected
 interventionFactor = 1.0 # Adjusted infection rate to be applied later during the simulation
 interventionDelay = 100 # The time after which beta2 replaces beta as the infection rate
 vaccinationFactor = 1.0 # Adjusted infection rate for vaccinated cells
@@ -56,6 +59,7 @@ options = ''
 longOptions = [
     'type=', 'size=', 'neighborhood=', 'range=', 'initial=',
     'alpha=', 'beta=', 'gamma=', 'delta=', 'epsilon=', 'zeta=',
+    'superspreaders=',
     'interventionFactor=', 'interventionDelay=',
     'vaccinationFactor=', 'vaccinationDelay=',
     'maxVaccines=', 'maxBeds=',
@@ -89,6 +93,8 @@ try:
             epsilon = float(currentValue)
         elif currentArgument in ('--zeta'):
             zeta = float(currentValue)
+        elif currentArgument in ('--superspreaders'):
+            superspreaders = int(currentValue)
         elif currentArgument in ('--interventionFactor'):
             interventionFactor = float(currentValue)
         elif currentArgument in ('--interventionDelay'):
@@ -129,6 +135,7 @@ class Settings:
 modelSettings = Settings(
     size=size, neighborhood=neighborhood, range=range, initial=initial,
     alpha=alpha, beta=beta, gamma=gamma, delta=delta, epsilon=epsilon, zeta=zeta,
+    superspreaders=superspreaders,
     interventionFactor=interventionFactor, interventionDelay=interventionDelay,
     vaccinationFactor=vaccinationFactor, vaccinationDelay=vaccinationDelay,
     maxVaccines=maxVaccines, maxBeds=maxBeds,

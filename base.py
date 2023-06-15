@@ -7,6 +7,7 @@ import neighborhood
 class Base:
     size = 0
     center = 0
+    neighborDeltas = np.empty(0)
     
     hasEnded = False
     time = 0
@@ -24,9 +25,9 @@ class Base:
         ## Post-processing
         self.center = round(self.size / 2)
         # Compute neighborhood
-        self.neighborhood = getattr(neighborhood, self.neighborhood)(self.range)
+        self.neighborDeltas = getattr(neighborhood, self.neighborhood)(self.range)
         # Adjust beta to account for neighborhood
-        self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
+        self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborDeltas))
         # Apply the maxBeds fraction to the model size and get a flat amount
         self.maxBeds = self.maxBeds * self.size ** 2
         # Apply the maxVaccines fraction to the model size and get a flat amount
@@ -64,9 +65,9 @@ class Base:
         
         # Apply Intervention
         if self.time == self.interventionDelay:
-            self.beta = 1 - (1 - self.beta) ** len(self.neighborhood)
+            self.beta = 1 - (1 - self.beta) ** len(self.neighborDeltas)
             self.beta *= self.interventionFactor
-            self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborhood))
+            self.beta = 1 - (1 - self.beta) ** (1 / len(self.neighborDeltas))
     
     # Calculate the new state for the cell at the given coordinates
     def updateCell(self, x, y):
@@ -75,7 +76,7 @@ class Base:
     # Count the number of infected cells in the cell's specified neighborhood
     def countInfectedNeighbors(self, x, y):
         count = 0
-        for dx, dy in self.neighborhood:
+        for dx, dy in self.neighborDeltas:
             if self.grid[(x + dx) % self.size, (y + dy) % self.size] == self.State.INFECTIOUS:
                 count += 1
         return count
