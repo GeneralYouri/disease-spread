@@ -4,6 +4,7 @@ from input import settings, modelSettings
 import models
 import plot
 
+
 def simulate():
     # Model creation
     startTimeGlobal = time.perf_counter()
@@ -27,13 +28,14 @@ def simulate():
     # Model output
     endTimeGlobal = time.perf_counter()
     print(f'Simulation finished after {model.time} steps and {endTimeGlobal - startTimeGlobal:.2f} seconds')
-    print(f'\n{model.__class__.__name__} Model Settings used:')
-    print(tabulate(modelSettings.__dict__.items()))
     return model
 
+
+marker = int(time.time()) % (10 ** 6)
 if settings.simulations == 1:
     model = simulate()
-    marker = int(time.time()) % (10 ** 6)
+    print(f'\n{model.__class__.__name__} Model Settings used:')
+    print(tabulate(modelSettings.__dict__.items()))
     plot.summary(model, settings, marker, False)
     plot.summary(model, settings, marker, True)
     plot.grid(model, settings, marker)
@@ -43,6 +45,7 @@ else:
     for _ in range(0, settings.simulations):
         model = simulate()
         usedModels.append(model)
-    marker = int(time.time()) % (10 ** 6)
+    print(f'\n{model.__class__.__name__} Model Settings used:')
+    print(tabulate(modelSettings.__dict__.items()))
     plot.averageSummary(usedModels, settings, marker, False)
     plot.averageSummary(usedModels, settings, marker, True)
