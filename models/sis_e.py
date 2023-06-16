@@ -1,4 +1,3 @@
-import random
 from .si_e import *
 
 
@@ -11,14 +10,14 @@ class SIS_E(SI_E):
             # Exposure
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
-            if random.random() < compounded:
+            if self.rng.random() < compounded:
                 return self.State.EXPOSED
         elif cell == self.State.EXPOSED:
             # Sicken
-            if random.random() < self.delta:
+            if self.rng.random() < self.delta:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
             # Re-susceptibility
-            if random.random() < self.alpha:
+            if self.rng.random() < self.alpha:
                 return self.State.SUSCEPTIBLE
         return cell

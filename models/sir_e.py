@@ -1,4 +1,3 @@
-import random
 from enum import IntEnum
 from .si_e import *
 
@@ -18,15 +17,15 @@ class SIR_E(SI_E):
             # Exposure
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
-            if random.random() < compounded:
+            if self.rng.random() < compounded:
                 return self.State.EXPOSED
         elif cell == self.State.EXPOSED:
             # Sicken
-            if random.random() < self.delta:
+            if self.rng.random() < self.delta:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
             # Recover
-            if random.random() < self.gamma:
+            if self.rng.random() < self.gamma:
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
             pass

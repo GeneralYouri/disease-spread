@@ -1,5 +1,6 @@
 import numpy as np
 from enum import IntEnum
+from numpy.random import default_rng
 import neighborhood
 
 
@@ -23,6 +24,7 @@ class Base:
             setattr(self, name, value)
         
         ## Post-processing
+        self.rng = default_rng()
         self.center = round(self.size / 2)
         # Compute neighborhood
         self.neighborDeltas = getattr(neighborhood, self.neighborhood)(1)

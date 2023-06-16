@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import neighborhood
 from .sir import *
 
@@ -22,11 +21,11 @@ class SIR_SSP(SIR):
         # Turn a fraction of cells into Super Spreaders
         cellCount = round(self.superspreaders * self.size ** 2)
         for _ in range(0, cellCount):
-            x = random.randint(0, self.size - 1)
-            y = random.randint(0, self.size - 1)
+            x = self.rng.integers(0, self.size)
+            y = self.rng.integers(0, self.size)
             while (self.grid[x, y] == self.State.INFECTIOUS):
-                x = random.randint(0, self.size - 1)
-                y = random.randint(0, self.size - 1)
+                x = self.rng.integers(0, self.size)
+                y = self.rng.integers(0, self.size)
             self.isSSP[x, y] = True
     
     # Count the number of infected cells in the cell's specified neighborhood

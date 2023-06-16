@@ -1,4 +1,3 @@
-import random
 from .si import *
 
 
@@ -11,10 +10,10 @@ class SIS(SI):
             # Sicken
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
-            if random.random() < compounded:
+            if self.rng.random() < compounded:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
             # Re-susceptibility
-            if random.random() < self.alpha:
+            if self.rng.random() < self.alpha:
                 return self.State.SUSCEPTIBLE
         return cell

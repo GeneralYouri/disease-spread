@@ -1,4 +1,3 @@
-import random
 from .sir import *
 
 
@@ -17,18 +16,18 @@ class SIR_H(SIR):
             # Sicken
             infectedCount = self.countInfectedNeighbors(x, y)
             compounded = 1 - (1 - self.beta) ** infectedCount # TODO: Can be precalculated
-            if random.random() < compounded:
+            if self.rng.random() < compounded:
                 return self.State.INFECTIOUS
         elif cell == self.State.INFECTIOUS:
             # Hospitalize
-            if random.random() < self.epsilon:
+            if self.rng.random() < self.epsilon:
                 return self.State.HOSPITALIZED
             # Recover
-            if random.random() < self.gamma:
+            if self.rng.random() < self.gamma:
                 return self.State.RECOVERED
         elif cell == self.State.HOSPITALIZED:
             # Recover
-            if random.random() < self.gamma / 2:
+            if self.rng.random() < self.gamma / 2:
                 return self.State.RECOVERED
         elif cell == self.State.RECOVERED:
             pass
