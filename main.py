@@ -18,6 +18,8 @@ def simulate():
             if settings.runToEnd and model.hasEnded:
                 break
             model.step()
+            if settings.shuffle:
+                model.shuffle()
         endTime = time.perf_counter()
         print(f'Batch {i + 1}: Simulated {model.time - i * settings.stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
         print(f'Grid state: {model.history[-1]}')

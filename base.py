@@ -84,3 +84,10 @@ class Base:
             for x in range(0, self.size):
                 counts[self.State(self.grid[x, y]).name] += 1
         return counts
+    
+    # Randomly shuffle the position of all cells in the grid
+    def shuffle(self):
+        self.rng.permuted(self.grid, axis=1, out=self.grid)
+        self.grid = np.transpose(self.grid)
+        self.rng.permuted(self.grid, axis=1, out=self.grid)
+        self.grid = np.transpose(self.grid)

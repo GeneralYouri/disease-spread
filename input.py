@@ -54,6 +54,7 @@ stepsPerBatch = 10 # How many steps are simulated per batch
 runToEnd = False # Whether to automatically stop running when the pandemic ends
 save = False # Whether to save the result plots as images
 show = False # Whether to display the result plots on screen
+shuffle = False # Whether to shuffle the grid every time step
 
 
 # Input handling
@@ -66,7 +67,7 @@ longOptions = [
     'maxVaccines=', 'maxBeds=', 'superspreaders=', 'supershedders=',
     
     'simulations=', 'batches=', 'stepsPerBatch=', 'runToEnd',
-    'save', 'show',
+    'save', 'show', 'shuffle',
 ]
 
 try:
@@ -121,6 +122,8 @@ try:
             save = True
         elif currentArgument in ('--show'):
             show = True
+        elif currentArgument in ('--shuffle'):
+            shuffle = True
 except getopt.error as err:
     print(str(err))
     exit()
@@ -145,5 +148,5 @@ modelSettings = Settings(
 settings = Settings(
     type=type,
     simulations=simulations, batches=batches, stepsPerBatch=stepsPerBatch, runToEnd=runToEnd,
-    save=save, show=show,
+    save=save, show=show, shuffle=shuffle,
 )
