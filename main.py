@@ -14,16 +14,15 @@ def simulate():
     # Model execution
     for i in range(0, settings.batches):
         startTime = time.perf_counter()
-        if settings.runToEnd:
-            if model.hasEnded:
+        for _ in range(0, settings.stepsPerBatch):
+            if settings.runToEnd and model.hasEnded:
                 break
-            model.runToEnd(settings.stepsPerBatch)
-        else:
-            for _ in range(0, settings.stepsPerBatch):
-                model.step()
+            model.step()
         endTime = time.perf_counter()
         print(f'Batch {i + 1}: Simulated {model.time - i * settings.stepsPerBatch} steps in {endTime - startTime:.2f} seconds')
         print(f'Grid state: {model.history[-1]}')
+        if settings.runToEnd and model.hasEnded:
+            break
 
     # Model output
     endTimeGlobal = time.perf_counter()

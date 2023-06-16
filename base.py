@@ -18,7 +18,7 @@ class Base:
     # Available Cell States for this Model
     class State(IntEnum):
         INFECTIOUS = 0
-
+    
     def __init__(self, settings):
         for name, value in settings.__dict__.items():
             setattr(self, name, value)
@@ -42,16 +42,6 @@ class Base:
     def initialize(self):
         self.grid = np.full((self.size, self.size), self.State.INFECTIOUS)
     
-    # Continuously advance the simulation until the pandemic ends (0 Infectious)
-    def runToEnd(self, maxSteps = 1):
-        if self.hasEnded == True:
-            return
-        for _ in range(0, maxSteps):
-            if self.history[-1][self.State.INFECTIOUS.name] == 0:
-                self.hasEnded = True
-                return
-            self.step()
-    
     # Advance the model one step forwards and update all cells
     def step(self):
         nextGrid = np.copy(self.grid)
@@ -64,6 +54,8 @@ class Base:
         self.grid = nextGrid
         self.history = np.append(self.history, self.getCounts())
         self.time += 1
+        if self.history[-1][self.State.INFECTIOUS.name] == 0:
+            self.hasEnded = True
         
         # Apply Intervention
         if self.time == self.interventionDelay:
