@@ -8,10 +8,11 @@ import neighborhood
 class Base:
     size = 0
     center = 0
-    neighborDeltas = np.empty(0)
-    
-    hasEnded = False
     time = 0
+    hasEnded = False
+    
+    rng = None
+    neighborDeltas = np.empty(0)
     grid = np.empty((0, 0))
     history = np.empty(0)
     
@@ -71,7 +72,9 @@ class Base:
     def countInfectedNeighbors(self, x, y):
         count = 0
         for dx, dy in self.neighborDeltas:
-            if self.grid[(x + dx) % self.size, (y + dy) % self.size] == self.State.INFECTIOUS:
+            nx = (x + dx) % self.size
+            ny = (y + dy) % self.size
+            if self.grid[nx, ny] == self.State.INFECTIOUS:
                 count += 1
         return count
     
