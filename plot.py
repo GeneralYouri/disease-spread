@@ -1,6 +1,6 @@
 import matplotlib.colors as mc
 import matplotlib.pyplot as plt
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 # Plot line colors for visualisation purposes
@@ -14,9 +14,14 @@ class Colors(Enum):
     VACCINATED = 'greenyellow'
     EXPOSED = 'orange'
     DEAD = 'black'
+    
+class Type(IntEnum):
+    NORMAL = 0
+    LOG = 1
+    LOGLOG = 2
 
 # Plot average summary/history data across multiple simulations
-def averageSummary(models, settings, marker, logPlot=False):
+def averageSummary(models, settings, marker, plotType):
     states = [s.name for s in models[0].State]
     lengths = [len(model.history) for model in models]
     times = range(0, min(lengths))
@@ -29,7 +34,11 @@ def averageSummary(models, settings, marker, logPlot=False):
     if models[0].interventionFactor != 1.0 and len(times) > models[0].interventionDelay:
         plt.axvline(models[0].interventionDelay, linestyle='--', label='INTERVENTION')
     
-    if logPlot:
+    if plotType == Type.LOGLOG:
+        plt.yscale('log', base=10)
+        plt.xscale('log', base=10)
+        marker = f'loglog_{marker}'
+    elif plotType == Type.LOG:
         plt.yscale('log', base=10)
         marker = f'log_{marker}'
     
@@ -46,7 +55,7 @@ def averageSummary(models, settings, marker, logPlot=False):
     plt.close('all')
 
 # Plot summary/history data of the simulation so far
-def summary(model, settings, marker, logPlot=False):
+def summary(model, settings, marker, plotType):
     states = [s.name for s in model.State]
     length = len(model.history)
     times = range(0, length)
@@ -59,7 +68,11 @@ def summary(model, settings, marker, logPlot=False):
     if model.interventionFactor != 1.0 and len(times) > model.interventionDelay:
         plt.axvline(model.interventionDelay, linestyle='--', label='INTERVENTION')
     
-    if logPlot:
+    if plotType == Type.LOGLOG:
+        plt.yscale('log', base=10)
+        plt.xscale('log', base=10)
+        marker = f'loglog_{marker}'
+    elif plotType == Type.LOG:
         plt.yscale('log', base=10)
         marker = f'log_{marker}'
     
