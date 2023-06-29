@@ -106,9 +106,9 @@ try:
         elif currentArgument in ('--maxBeds'):
             maxBeds = float(currentValue)
         elif currentArgument in ('--superspreaders'):
-            superspreaders = int(currentValue)
+            superspreaders = float(currentValue)
         elif currentArgument in ('--supershedders'):
-            supershedders = int(currentValue)
+            supershedders = float(currentValue)
 
         elif currentArgument in ('--simulations'):
             simulations = int(currentValue)
