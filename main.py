@@ -50,7 +50,7 @@ else:
         usedModels.append(model)
     print(f'\n{model.__class__.__name__} Model Settings used:')
     print(tabulate(modelSettings.__dict__.items()))
-    plot.averageSummary(model, settings, marker, plot.Type.NORMAL)
+    plot.averageSummary(usedModels, settings, marker, plot.Type.NORMAL)
     if settings.save:
-        plot.averageSummary(model, settings, marker, plot.Type.LOG)
-        plot.averageSummary(model, settings, marker, plot.Type.LOGLOG)
+        plot.averageSummary(usedModels, settings, marker, plot.Type.LOG)
+        plot.averageSummary(usedModels, settings, marker, plot.Type.LOGLOG)
