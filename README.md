@@ -55,8 +55,8 @@ CA.exe --type=SIRS --batches=10 --stepsPerBatch=10 --save
 ```
 #
 
-## Settings 
-All settings are optional and settings can be specified in any order.\
+## Settings
+The order in which you specify settings does not matter. You do need to add a space before every next setting. All settings start with two dashes and are case-sensitive.\
 Note: default values are very likely to change over time.
 
 `--type=SIR`\
@@ -81,7 +81,7 @@ Infection rate for S->I and S->E.\
 The Infection rate has been updated to auto-adjust for neighborhood size.\
 You can therefore use the same beta values as used in the ODE.
 
-`--gamma=0.25`\
+`--gamma=0.1`\
 Recovery rate for I->R and H->R.
 
 `--delta=0.2`\
@@ -89,6 +89,7 @@ Infection rate after Exposure for E->I.
 
 `--epsilon=0.03`\
 Hospitalization rate for I->H.\
+The default value is 0.03 * gamma.\
 Note it’s usually smart to set this relative to gamma and to specify both settings together.
 
 `--zeta=0.005`\
@@ -148,6 +149,9 @@ Note: To --save a graph, make a new folder called "Plots" in the same directory 
 
 `--show`\
 Whether to display the result plots on screen.
+
+`--shuffle`\
+Whether to shuffle the position of all cells around the grid every time step.
 #
 
 ## TODO List
